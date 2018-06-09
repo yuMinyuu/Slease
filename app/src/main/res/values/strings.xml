@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">Slease</string>
-    <string name="login_name">Log In</string>
+    <string name="loginbutton">LOG IN</string>
 </resources>
