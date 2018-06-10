@@ -1,7 +1,7 @@
 package com.example.gaominyu.slease;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+        import android.support.v7.app.AppCompatActivity;
+        import android.os.Bundle;
 
 public class BrowseActivity extends AppCompatActivity {
 

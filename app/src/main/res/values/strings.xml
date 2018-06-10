@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Slease</string>
     <string name="loginbutton">LOG IN</string>
+    <string name="Logiin_RegisterHere">Register Here!</string>
+    <string name="Login_Password">Password</string>
+    <string name="Login_Username">Username</string>
 </resources>
