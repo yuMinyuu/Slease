@@ -4,4 +4,6 @@
     <string name="Logiin_RegisterHere">Register Here!</string>
     <string name="Login_Password">Password</string>
     <string name="Login_Username">Username</string>
+    <string name="Topbar_Setting">Setting</string>
+    <string name="Topbar_Search">Search</string>
 </resources>
