@@ -7,12 +7,12 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
 
-        <style name="MyStyle1">
-            <item name="android:layout_width">match_parent</item>
-            <item name="android:layout_height">0dip</item>
-            <item name="android:layout_weight">1</item>
-            <!-- etc. -->
-        </style>
+        <!--<style name="MyStyle1">-->
+            <!--<item name="android:layout_width">match_parent</item>-->
+            <!--<item name="android:layout_height">0dip</item>-->
+            <!--<item name="android:layout_weight">1</item>-->
+            <!--&lt;!&ndash; etc. &ndash;&gt;-->
+        <!--</style>-->
     </style>
 
 </resources>

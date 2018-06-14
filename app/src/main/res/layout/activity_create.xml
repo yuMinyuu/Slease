@@ -17,44 +17,96 @@
         android:layout_height="wrap_content"
         android:hint="Item Description"/>
 
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
+        android:text="Select Category"
+        android:layout_marginBottom="5dp"/>
+
+    <Spinner
+        android:spinnerMode="dropdown"
+        android:id="@+id/spinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        />
+
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:columnCount="4">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/imageView1"
             android:layout_width="80dp"
             android:layout_height="80dp"
             app:srcCompat="@drawable/plus" />
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/imageView2"
             android:layout_width="80dp"
             android:layout_height="80dp"
             app:srcCompat="@drawable/plus" />
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/imageView3"
             android:layout_width="80dp"
             android:layout_height="80dp"
             app:srcCompat="@drawable/plus" />
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/imageView4"
             android:layout_width="80dp"
             android:layout_height="80dp"
             app:srcCompat="@drawable/plus" />
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/imageView5"
             android:layout_width="80dp"
             android:layout_height="80dp"
             app:srcCompat="@drawable/plus" />
 
     </GridLayout>
 
-    <EditText
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="18sp" />
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="number"
-        android:hint="SGD"/>
+        android:clipToPadding="false">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:text="Deposit" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="SGD"
+            android:inputType="number" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:text="Rate/Day" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="SGD"
+            android:inputType="number" />
+
+    </LinearLayout>
+
+
 
 </LinearLayout>
