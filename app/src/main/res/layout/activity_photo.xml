@@ -8,11 +8,13 @@
     android:weightSum="10"
     tools:context=".PhotoActivity">
 
-    <ImageView
-        android:id="@+id/photo_preview"
+    <FrameLayout
+        android:id="@+id/photo_frame"
         android:layout_weight="9"
         android:layout_width="match_parent"
-        android:layout_height="fill_parent" />
+        android:layout_height="fill_parent">
+
+    </FrameLayout>
 
     <Button
         android:id="@+id/photo_takePhoto"
