@@ -25,7 +25,7 @@ public class BrowseActivity extends AppCompatActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(BrowseActivity.this, CreateActivity.class));
+                startActivity(new Intent(BrowseActivity.this, PhotoActivity.class));
             }
         });
     }
