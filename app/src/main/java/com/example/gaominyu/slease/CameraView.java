@@ -10,12 +10,12 @@ import android.view.SurfaceView;
 import java.io.IOException;
 import java.util.List;
 
-public class ShowCamera extends SurfaceView implements SurfaceHolder.Callback {
+public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 
     Camera camera;
     SurfaceHolder holder;
 
-    public ShowCamera(Context context, Camera camera) {
+    public CameraView(Context context, Camera camera) {
         super(context);
         this.camera = camera;
         holder = getHolder();
@@ -37,6 +37,7 @@ public class ShowCamera extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceCreated(SurfaceHolder holder) {
         Camera.Parameters parameters = camera.getParameters();
 
+        // Set picture resolution to its hardware's
         List<Camera.Size> sizes = parameters.getSupportedPictureSizes();
         Camera.Size mSize = null;
         for(Camera.Size size : sizes){
@@ -59,10 +60,13 @@ public class ShowCamera extends SurfaceView implements SurfaceHolder.Callback {
         // Set resolution of camera
         parameters.setPictureSize(mSize.width, mSize.height);
 
+        // Set camera to be auto focused
+        parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+
         camera.setParameters(parameters);
         try {
             camera.setPreviewDisplay(holder);
-            camera.startPreview();;
+            camera.startPreview();
         }
         catch (IOException ex )
         {
