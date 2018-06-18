@@ -1,15 +1,30 @@
 package com.example.gaominyu.slease;
 
 import android.hardware.Camera;
+import android.net.Uri;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import javax.xml.datatype.Duration;
+
+import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
+
 public class PhotoActivity extends AppCompatActivity {
 
+    private static final String TAG = "PhotoActivity";
     FrameLayout photoFrame;
     Camera camera;
     CameraView cameraView;
@@ -20,7 +35,7 @@ public class PhotoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_photo);
 
         // Object instantiation
-        Button btnTakePhoto = findViewById(R.id.photo_takePhoto);
+        Button btnTakePhoto = findViewById(R.id.photo_button1);
         photoFrame = findViewById(R.id.photo_frame);
 
         // Open the camera
@@ -30,8 +45,7 @@ public class PhotoActivity extends AppCompatActivity {
         cameraView = new CameraView(this, camera);
         photoFrame.addView(cameraView);
 
-
-
+        // Check if max 9 pics is met before allowing another picture to be taken
         btnTakePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -48,19 +62,13 @@ public class PhotoActivity extends AppCompatActivity {
                 @Override
                 public void onPictureTaken(byte[] data, Camera camera) {
 
-                    //debugger line
-                    Toast.makeText(getApplicationContext(), "One photo is taken.", Toast.LENGTH_LONG).show();
+                    // Save this picture to the page's list of thumbnails
+                    Toast.makeText(getApplicationContext(), "taken", Toast.LENGTH_LONG).show();
 
-                    //save this picture to the page's list of thumbnails
-
+                    // Restart camera after taking one picture
+                    camera.startPreview();
                 }
             });
         }
     }
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        Bitmap bitmap = (Bitmap)data.getExtras().get("data");
-//        photoPreview.setImageBitmap(bitmap);
-//    }
 }
