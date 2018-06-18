@@ -6,4 +6,6 @@
     <string name="Login_Username">Username</string>
     <string name="Topbar_Setting">Setting</string>
     <string name="Topbar_Search">Search</string>
+    <string name="Select_photo">Select From Gallery</string>
+    <string name="Take_photo">Take Photo</string>
 </resources>
