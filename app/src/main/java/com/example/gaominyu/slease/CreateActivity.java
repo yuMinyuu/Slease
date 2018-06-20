@@ -57,32 +57,34 @@ public class CreateActivity extends AppCompatActivity {
 
             }
 
-            public boolean onOptionsItemSelected(MenuItem item){
-                switch((item.getItemId())){
-                    case R.id.addListing:
-                        addNewListing();
-
-                        //backtoMainActivity();
-                        return true;
-
-                }
-                return CreateActivity.super.onOptionsItemSelected(item);
-            }
-
-            private void addNewListing(){
-                String name = txtVName.getText().toString().trim();
-                String description = txtVDescription.getText().toString().trim();
-                String category = spinnerCategory.getText().toString().trim();
-                String  deposit = txtVDeposit.getText().toString().trim();
-                String ratePerDay = txtVRatePerDay.getText().toString().trim();
-
-                //write a listing to the database
-                DatabaseReference mDatabase = FireBaseDatabase.getInstance().getReference("listings");
-                Listing listingItem = new Listing();
-                listingItem.setItemName(name);
-
-
-            }
         });
     }
+
+
+//    public boolean onOptionsItemSelected(MenuItem item){
+//        switch((item.getItemId())){
+//            case R.id.addListing:
+//                addNewListing();
+//
+//                //backtoMainActivity();
+//                return true;
+//
+//        }
+//        return CreateActivity.super.onOptionsItemSelected(item);
+//    }
+//
+//    private void addNewListing(){
+//        String name = txtVName.getText().toString().trim();
+//        String description = txtVDescription.getText().toString().trim();
+//        String category = spinnerCategory.getText().toString().trim();
+//        String  deposit = txtVDeposit.getText().toString().trim();
+//        String ratePerDay = txtVRatePerDay.getText().toString().trim();
+//
+//        //write a listing to the database
+//        DatabaseReference mDatabase = FireBaseDatabase.getInstance().getReference("listings");
+//        Listing listingItem = new Listing();
+//        listingItem.setItemName(name);
+//
+//
+//    }
 }
