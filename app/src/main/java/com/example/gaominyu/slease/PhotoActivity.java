@@ -10,7 +10,9 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PhotoActivity extends AppCompatActivity {
 
@@ -19,6 +21,8 @@ public class PhotoActivity extends AppCompatActivity {
     private Camera camera;
     private CameraView cameraView;
     private LinearLayout linearLayout;
+    private List<Bitmap> imageList;
+    private boolean safeToTakePicture = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +33,11 @@ public class PhotoActivity extends AppCompatActivity {
         Button btnTakePhoto = findViewById(R.id.photo_button1);
         photoFrame = findViewById(R.id.photo_frame);
         linearLayout = findViewById(R.id.photo_thumbnails);
+        imageList = new ArrayList<>(4);
+
+        // Set button1's text to the remaining number of space available for imageList
+        btnTakePhoto.setText("9");
+        btnTakePhoto.setTextSize(30);
 
         // Open the camera
         camera = Camera.open();
@@ -37,40 +46,46 @@ public class PhotoActivity extends AppCompatActivity {
         cameraView = new CameraView(this, camera);
         photoFrame.addView(cameraView);
 
-//        // Initialize the HorizontalScrollView for images taken
-//        HorizontalGridView horizontalGridView = findViewById(R.id.photo_gridView);
-//        GridElementAdapter adapter = new GridElementAdapter(this);
-//        horizontalGridView.setAdapter(adapter);
-
         // Check if max 9 pics is met before allowing another picture to be taken
         btnTakePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                captureImage(view);
-//                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//                startActivityForResult(intent, 0);
+                //This prevents camera crashing from too fast takePicture is being called.
+                if (safeToTakePicture) {
+                    captureImage(view);
+                    safeToTakePicture = false;
+                }
             }
         });
     }
 
-    public  void captureImage(View view) {
+    //call this to take picture
+    protected  void captureImage(View view) {
         if(camera != null){
             camera.takePicture(null, null, new Camera.PictureCallback() {
                 @Override
                 public void onPictureTaken(byte[] data, Camera camera) {
 
-                    // Save this picture to the page's list of thumbnails
-                    Toast.makeText(getApplicationContext(), "taken", Toast.LENGTH_LONG).show();
-
-                    ImageView image = (ImageView) linearLayout.getChildAt(0);
-                    Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
-                    image.setImageBitmap(Bitmap.createScaledBitmap(bmp, 320,426, false));
-                    image.setVisibility(View.VISIBLE);
-
-                    // Restart camera after taking one picture
                     camera.startPreview();
 
+                    // Append a new imageView containing picture as the last in the list of imageViews
+                    ImageView imageView = new ImageView(getApplicationContext());
+                    Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
+                    imageView.setImageBitmap(Bitmap.createScaledBitmap(bmp, 320,426, false));
+                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(160, 160);
+                    lp.setMarginEnd(30);
+                    imageView.setLayoutParams(lp);
+                    linearLayout.addView(imageView);
 
+                    // Save this image into the imageList so as to pass them later to another activity using intent
+                    imageList.add(bmp);
+                    if(bmp!=null)
+                    {
+                        bmp.recycle(); // To free up memory space due to large image decoding
+                        bmp=null;
+                    }
+
+                    safeToTakePicture = true;
                 }
             });
         }
