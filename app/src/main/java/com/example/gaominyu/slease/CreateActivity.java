@@ -25,7 +25,7 @@ public class CreateActivity extends AppCompatActivity {
 
     private void initSimpleSpinner() {
 
-        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        Spinner spinner = (Spinner) findViewById(R.id.spinnerCategory);
 
         // Spinner Drop down elements
         List<String> languages = new ArrayList<String>();
