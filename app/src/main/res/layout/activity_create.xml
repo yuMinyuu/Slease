@@ -8,14 +8,16 @@
     tools:context=".CreateActivity">
 
     <EditText
+        android:id="@+id/txtVName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Item Name"/>
+        android:hint="Item Name" />
 
     <EditText
+        android:id="@+id/txtVDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Item Description"/>
+        android:hint="Item Description" />
 
     <TextView
         android:layout_width="fill_parent"
@@ -25,11 +27,10 @@
         android:layout_marginBottom="5dp"/>
 
     <Spinner
-        android:spinnerMode="dropdown"
-        android:id="@+id/spinner"
+        android:id="@+id/spinnerCategory"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        />
+        android:spinnerMode="dropdown" />
 
     <GridLayout
         android:layout_width="match_parent"
@@ -81,6 +82,7 @@
             android:text="Deposit" />
 
         <EditText
+            android:id="@+id/txtVDeposit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="SGD"
@@ -100,6 +102,7 @@
             android:text="Rate/Day" />
 
         <EditText
+            android:id="@+id/txtVRatePerDay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="SGD"

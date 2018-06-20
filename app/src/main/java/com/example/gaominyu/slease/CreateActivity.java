@@ -2,6 +2,7 @@ package com.example.gaominyu.slease;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -53,6 +54,33 @@ public class CreateActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+
+            public boolean onOptionsItemSelected(MenuItem item){
+                switch((item.getItemId())){
+                    case R.id.addListing:
+                        addNewListing();
+
+                        //backtoMainActivity();
+                        return true;
+
+                }
+                return CreateActivity.super.onOptionsItemSelected(item);
+            }
+
+            private void addNewListing(){
+                String name = txtVName.getText().toString().trim();
+                String description = txtVDescription.getText().toString().trim();
+                String category = spinnerCategory.getText().toString().trim();
+                String  deposit = txtVDeposit.getText().toString().trim();
+                String ratePerDay = txtVRatePerDay.getText().toString().trim();
+
+                //write a listing to the database
+                DatabaseReference mDatabase = FireBaseDatabase.getInstance().getReference("listings");
+                Listing listingItem = new Listing();
+                listingItem.setItemName(name);
+
 
             }
         });
