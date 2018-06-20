@@ -3,12 +3,8 @@ package com.example.gaominyu.slease;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.Camera;
-import android.net.Uri;
-import android.os.Environment;
-import android.support.v17.leanback.widget.HorizontalGridView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -16,24 +12,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import javax.xml.datatype.Duration;
-
-import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
-
 public class PhotoActivity extends AppCompatActivity {
 
     private static final String TAG = "PhotoActivity";
     private FrameLayout photoFrame;
     private Camera camera;
     private CameraView cameraView;
-    private HorizontalGridView horizontalGridView;
     private LinearLayout linearLayout;
 
     @Override
@@ -54,7 +38,7 @@ public class PhotoActivity extends AppCompatActivity {
         photoFrame.addView(cameraView);
 
 //        // Initialize the HorizontalScrollView for images taken
-//        horizontalGridView = findViewById(R.id.photo_gridView);
+//        HorizontalGridView horizontalGridView = findViewById(R.id.photo_gridView);
 //        GridElementAdapter adapter = new GridElementAdapter(this);
 //        horizontalGridView.setAdapter(adapter);
 
