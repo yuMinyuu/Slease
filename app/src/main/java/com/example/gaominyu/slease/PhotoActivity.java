@@ -69,13 +69,19 @@ public class PhotoActivity extends AppCompatActivity {
                     camera.startPreview();
 
                     // Append a new imageView containing picture as the last in the list of imageViews
+                    FrameLayout frameLayout = new FrameLayout(getApplicationContext());
+                    linearLayout.addView(frameLayout);
                     ImageView imageView = new ImageView(getApplicationContext());
                     Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
                     imageView.setImageBitmap(Bitmap.createScaledBitmap(bmp, 320,426, false));
                     LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(160, 160);
-                    lp.setMarginEnd(30);
+                    lp.setMargins(10, 20, 10, 0);
                     imageView.setLayoutParams(lp);
-                    linearLayout.addView(imageView);
+                    frameLayout.addView(imageView);
+                    Button crossButton = new Button(getApplicationContext());
+                    crossButton.setBackgroundResource(R.drawable.cross16);
+                    crossButton.setLayoutParams(new FrameLayout.LayoutParams(40, 40));
+                    frameLayout.addView(crossButton);
 
                     // Save this image into the imageList so as to pass them later to another activity using intent
                     imageList.add(bmp);
