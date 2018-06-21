@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,12 +18,13 @@ import java.util.List;
 public class PhotoActivity extends AppCompatActivity {
 
     private static final String TAG = "PhotoActivity";
+    private Button btnTakePhoto;
     private FrameLayout photoFrame;
     private Camera camera;
     private CameraView cameraView;
     private LinearLayout linearLayout;
-    private List<Bitmap> imageList;
     private boolean safeToTakePicture = true;
+    private final int maxSize = 9;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,13 +32,12 @@ public class PhotoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_photo);
 
         // Object instantiation
-        Button btnTakePhoto = findViewById(R.id.photo_button1);
+        btnTakePhoto = findViewById(R.id.photo_button1);
         photoFrame = findViewById(R.id.photo_frame);
         linearLayout = findViewById(R.id.photo_thumbnails);
-        imageList = new ArrayList<>(4);
 
         // Set button1's text to the remaining number of space available for imageList
-        btnTakePhoto.setText("9");
+        btnTakePhoto.setText(String.valueOf(maxSize - linearLayout.getChildCount()));
         btnTakePhoto.setTextSize(30);
 
         // Open the camera
@@ -68,11 +69,12 @@ public class PhotoActivity extends AppCompatActivity {
 
                     camera.startPreview();
 
-                    // Append a new framelayout containing an imageView and a cross button in the linearlayout in horizontalscrollview
-                    // Its imageView should contain the image that we just took
+                    // Append a new framelayout containing an imageView and a cross button in the
+                    // linearlayout of horizontalscrollview. Its imageView should contain the image
+                    // that we just took
                     final FrameLayout frameLayout = new FrameLayout(getApplicationContext());
                     linearLayout.addView(frameLayout);
-                    ImageView imageView = new ImageView(getApplicationContext());
+                    final ImageView imageView = new ImageView(getApplicationContext());
                     Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
                     imageView.setImageBitmap(Bitmap.createScaledBitmap(bmp, 320,426, false));
                     LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(160, 160);
@@ -84,22 +86,33 @@ public class PhotoActivity extends AppCompatActivity {
                     crossButton.setLayoutParams(new FrameLayout.LayoutParams(40, 40));
                     frameLayout.addView(crossButton);
 
-                    // Remove this entire framelayout when clicking its containing cross button and delete its image file from imageList
+                    // Update the button to show how many more pictures can you take
+                    int diff = maxSize - linearLayout.getChildCount();
+                    btnTakePhoto.setText(String.valueOf(diff));
+                    if(diff <= 0) {
+                        btnTakePhoto.setAlpha(.5f);
+                        btnTakePhoto.setEnabled(false);
+                    }
+
+                    // Remove this entire framelayout when clicking its containing cross button and
+                    // delete its image file from imageList
                     crossButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             linearLayout.removeView(frameLayout);
+                            btnTakePhoto.setEnabled(true);
+                            btnTakePhoto.setAlpha(1);
+                            btnTakePhoto.setText(String.valueOf(maxSize - linearLayout.getChildCount()));
                         }
                     });
 
-                    // Save this image into the imageList so as to pass them later to another activity using intent
-                    imageList.add(bmp);
-                    if(bmp!=null)
-                    {
-                        bmp.recycle(); // To free up memory space due to large image decoding
-                        bmp=null;
+                    // To free up memory space from bitmap decoding
+                    if(bmp!=null) {
+                        bmp.recycle();
+                        bmp = null;
                     }
 
+                    // Toggle this safe catch back so that next image can be taken
                     safeToTakePicture = true;
                 }
             });
