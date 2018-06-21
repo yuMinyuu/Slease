@@ -68,8 +68,9 @@ public class PhotoActivity extends AppCompatActivity {
 
                     camera.startPreview();
 
-                    // Append a new imageView containing picture as the last in the list of imageViews
-                    FrameLayout frameLayout = new FrameLayout(getApplicationContext());
+                    // Append a new framelayout containing an imageView and a cross button in the linearlayout in horizontalscrollview
+                    // Its imageView should contain the image that we just took
+                    final FrameLayout frameLayout = new FrameLayout(getApplicationContext());
                     linearLayout.addView(frameLayout);
                     ImageView imageView = new ImageView(getApplicationContext());
                     Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
@@ -82,6 +83,14 @@ public class PhotoActivity extends AppCompatActivity {
                     crossButton.setBackgroundResource(R.drawable.cross16);
                     crossButton.setLayoutParams(new FrameLayout.LayoutParams(40, 40));
                     frameLayout.addView(crossButton);
+
+                    // Remove this entire framelayout when clicking its containing cross button and delete its image file from imageList
+                    crossButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            linearLayout.removeView(frameLayout);
+                        }
+                    });
 
                     // Save this image into the imageList so as to pass them later to another activity using intent
                     imageList.add(bmp);
