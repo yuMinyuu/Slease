@@ -10,7 +10,7 @@
         android:id="@+id/top_toolbar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/top_gradient"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
@@ -35,14 +35,11 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:layout_marginBottom="140dp"
-
-
         android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         android:foregroundGravity="bottom"
         android:src="@drawable/plus"
+        android:backgroundTint="@color/btmGradient_start"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
 
 </android.support.constraint.ConstraintLayout>
