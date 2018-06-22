@@ -8,4 +8,5 @@
     <string name="Topbar_Search">Search</string>
     <string name="Select_photo">Select From Gallery</string>
     <string name="Take_photo">Take Photo</string>
+    <string name="SignupButton">SIGN UP</string>
 </resources>
