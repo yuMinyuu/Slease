@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -19,6 +20,7 @@ public class PhotoActivity extends AppCompatActivity {
 
     private static final String TAG = "PhotoActivity";
     private Button btnTakePhoto;
+    private ImageButton btnNext;
     private FrameLayout photoFrame;
     private Camera camera;
     private CameraView cameraView;
@@ -35,6 +37,7 @@ public class PhotoActivity extends AppCompatActivity {
         btnTakePhoto = findViewById(R.id.photo_button1);
         photoFrame = findViewById(R.id.photo_frame);
         linearLayout = findViewById(R.id.photo_thumbnails);
+        btnNext = findViewById(R.id.photo_button2);
 
         // Set button1's text to the remaining number of space available for imageList
         btnTakePhoto.setText(String.valueOf(maxSize - linearLayout.getChildCount()));
@@ -56,6 +59,13 @@ public class PhotoActivity extends AppCompatActivity {
                     captureImage(view);
                     safeToTakePicture = false;
                 }
+            }
+        });
+
+        btnNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
             }
         });
     }
@@ -103,6 +113,16 @@ public class PhotoActivity extends AppCompatActivity {
                             btnTakePhoto.setEnabled(true);
                             btnTakePhoto.setAlpha(1);
                             btnTakePhoto.setText(String.valueOf(maxSize - linearLayout.getChildCount()));
+                            if(linearLayout.getChildCount() <= 0) {
+                                btnNext.setVisibility(View.INVISIBLE);
+                            }
+                        }
+                    });
+
+                    imageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
                         }
                     });
 
@@ -111,6 +131,9 @@ public class PhotoActivity extends AppCompatActivity {
                         bmp.recycle();
                         bmp = null;
                     }
+
+                    // Toggle the btnNext to appear because there is guaranteed content inside now
+                    btnNext.setVisibility(View.VISIBLE);
 
                     // Toggle this safe catch back so that next image can be taken
                     safeToTakePicture = true;
