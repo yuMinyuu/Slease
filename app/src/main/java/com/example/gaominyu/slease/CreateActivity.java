@@ -26,7 +26,6 @@ public class CreateActivity extends AppCompatActivity {
         // Get images from PhotoActivity
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
-        Toast.makeText(getApplicationContext(), String.valueOf(extras.size()), Toast.LENGTH_LONG).show();
     }
 
     private void initSimpleSpinner() {

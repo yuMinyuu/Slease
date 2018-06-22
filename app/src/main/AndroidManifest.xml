@@ -20,8 +20,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".BrowseActivity" />
-        <activity android:name=".CreateActivity" />
+        <activity android:name=".BrowseActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".CreateActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".PhotoActivity"
             android:screenOrientation="portrait"></activity>
     </application>
