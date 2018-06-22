@@ -1,7 +1,9 @@
 package com.example.gaominyu.slease;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.hardware.Camera;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +68,21 @@ public class PhotoActivity extends AppCompatActivity {
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(PhotoActivity.this, CreateActivity.class);
+                Bundle extras = new Bundle();
+                for(int i = 0 ; i < linearLayout.getChildCount(); i++) {
+                    FrameLayout frameLayout = (FrameLayout)linearLayout.getChildAt(i);
+                    ImageView imageView = (ImageView)frameLayout.getChildAt(0);
+                    Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    byte[] byteArray = stream.toByteArray();
+                    bitmap.recycle();
+                    extras.putByteArray(String.valueOf(i), byteArray);
+                }
+                if(!extras.isEmpty())
+                    intent.putExtras(extras);
+                startActivity(intent);
             }
         });
     }

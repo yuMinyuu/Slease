@@ -1,5 +1,6 @@
 package com.example.gaominyu.slease;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -21,6 +22,11 @@ public class CreateActivity extends AppCompatActivity {
 
         // Programmatically initialize the spinner for categories
         initSimpleSpinner();
+
+        // Get images from PhotoActivity
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        Toast.makeText(getApplicationContext(), String.valueOf(extras.size()), Toast.LENGTH_LONG).show();
     }
 
     private void initSimpleSpinner() {
@@ -49,7 +55,7 @@ public class CreateActivity extends AppCompatActivity {
 
                 String item = parent.getItemAtPosition(position).toString();
 
-                Toast.makeText(parent.getContext(), "Android Simple Spinner Example Output..." + item, Toast.LENGTH_LONG).show();
+                //Toast.makeText(parent.getContext(), "Android Simple Spinner Example Output..." + item, Toast.LENGTH_LONG).show();
             }
 
             @Override
