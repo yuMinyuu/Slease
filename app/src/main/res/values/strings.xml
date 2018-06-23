@@ -9,4 +9,6 @@
     <string name="Select_photo">Select From Gallery</string>
     <string name="Take_photo">Take Photo</string>
     <string name="SignupButton">SIGN UP</string>
+    <string name="SignUp_Repassword">Re-enter Password</string>
+    <string name="create_publish">Publish</string>
 </resources>
