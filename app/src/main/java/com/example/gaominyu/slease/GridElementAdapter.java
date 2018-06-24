@@ -27,17 +27,11 @@ public class GridElementAdapter extends RecyclerView.Adapter<GridElementAdapter.
     }
 
     public static class SimpleViewHolder extends RecyclerView.ViewHolder {
-        public final ImageView img1, img2, img3, img4, img5;
         public final Button button;
 
         public SimpleViewHolder(View view) {
             super(view);
             button = view.findViewById(R.id.button);
-            img1 = (ImageView) view.findViewById(R.id.imageView1);
-            img2 = (ImageView) view.findViewById(R.id.imageView2);
-            img3 = (ImageView) view.findViewById(R.id.imageView3);
-            img4 = (ImageView) view.findViewById(R.id.imageView4);
-            img5 = (ImageView) view.findViewById(R.id.imageView5);
         }
     }
 

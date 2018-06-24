@@ -4,12 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:weightSum="14"
     android:orientation="vertical"
     tools:context=".CreateActivity">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="0dp"
+        android:layout_weight="13">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,20 +28,33 @@
                 android:id="@+id/txtVDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:minLines="6"
+                android:lines="8"
+                android:maxLines="10"
+                android:gravity="top|start"
+                android:scrollbars="vertical"
                 android:hint="Item Description" />
 
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dip"
-                android:text="Select Category"
-                android:layout_marginBottom="5dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp">
 
-            <Spinner
-                android:id="@+id/spinnerCategory"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:spinnerMode="dropdown" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" Item Category"/>
+
+                <Spinner
+                    android:id="@+id/spinnerCategory"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:spinnerMode="dropdown" />
+
+            </LinearLayout>
 
             <GridLayout
                 android:layout_width="match_parent"
@@ -48,27 +63,6 @@
 
                 <ImageView
                     android:id="@+id/imageView1"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    app:srcCompat="@drawable/plus" />
-
-                <ImageView
-                    android:id="@+id/imageView2"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    app:srcCompat="@drawable/plus" />
-                <ImageView
-                    android:id="@+id/imageView3"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    app:srcCompat="@drawable/plus" />
-                <ImageView
-                    android:id="@+id/imageView4"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    app:srcCompat="@drawable/plus" />
-                <ImageView
-                    android:id="@+id/imageView5"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     app:srcCompat="@drawable/plus" />
@@ -125,12 +119,10 @@
 
     <Button
         android:layout_width="match_parent"
-        android:layout_height="36dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:background="@color/btmGradient_start"
-        android:paddingBottom="5dp"
-        android:paddingEnd="5dp"
-        android:paddingStart="5dp"
-        android:paddingTop="5dp"
+        android:layout_margin="10dp"
         android:text="@string/create_publish"
         android:textAlignment="center"
         android:textColor="@android:color/white"/>

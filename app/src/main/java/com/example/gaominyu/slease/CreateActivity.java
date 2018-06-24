@@ -1,13 +1,16 @@
 package com.example.gaominyu.slease;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -30,18 +33,46 @@ public class CreateActivity extends AppCompatActivity {
 
     private void initSimpleSpinner() {
 
-        Spinner spinner = (Spinner) findViewById(R.id.spinnerCategory);
+        Spinner spinner = findViewById(R.id.spinnerCategory);
 
-        // Spinner Drop down elements
+        spinner.setPrompt("Select a category");
+
+        // Spinner Drop down elements with some trumped-up examples of choices
         List<String> languages = new ArrayList<String>();
-        languages.add("Andorid");
-        languages.add("IOS");
-        languages.add("PHP");
-        languages.add("Java");
-        languages.add(".Net");
+        languages.add("");
+        languages.add("Drone");
+        languages.add("Camera");
+        languages.add("Costume");
+        languages.add("Auto Mobile");
+        languages.add("Bicycle");
+        languages.add("Motorcycle");
 
-        // Creating adapter for spinner
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, languages);
+        // Creating adapter for spinner and disable the first item in the list from selection
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, languages) {
+            @Override
+            public boolean isEnabled(int position) {
+                if (position == 0) {
+                    // Disable the second item from Spinner
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if (position == 0) {
+                    // Set the disable item text color
+                    tv.setTextColor(Color.GRAY);
+                } else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+        };
 
         // Drop down layout style - list view with radio button
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
