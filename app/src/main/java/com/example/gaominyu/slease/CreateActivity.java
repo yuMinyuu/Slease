@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageView;
@@ -29,14 +30,15 @@ public class CreateActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create);
 
-        // Programmatically initialize the spinner for categories
-        initSimpleSpinner();
+        // Programmatically initialize the spinner for categories and frequency
+        initFirstSpinner();
+        initSecondSpinner();
 
-        // Get images from ImageHolder to set up image gridlist
+        // Get images from ImageHolder to set up image GridList
         initGridLayout();
     }
 
-    private void initSimpleSpinner() {
+    private void initFirstSpinner() {
 
         Spinner spinner = findViewById(R.id.spinnerCategory);
 
@@ -87,10 +89,42 @@ public class CreateActivity extends AppCompatActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
                 String item = parent.getItemAtPosition(position).toString();
+            }
 
-                //Toast.makeText(parent.getContext(), "Android Simple Spinner Example Output..." + item, Toast.LENGTH_LONG).show();
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+
+        });
+    }
+
+    private void initSecondSpinner() {
+
+        Spinner spinner = findViewById(R.id.spinnerFrequency);
+
+        // Spinner Drop down elements with some trumped-up examples of choices
+        List<String> languages = new ArrayList<>();
+        languages.add("Day");
+        languages.add("Week");
+        languages.add("Month");
+        languages.add("Quarter");
+        languages.add("Half Year");
+        languages.add("Year");
+
+        // Creating adapter for spinner and disable the first item in the list from selection
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, languages);
+
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        spinner.setAdapter(dataAdapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String item = parent.getItemAtPosition(position).toString();
             }
 
             @Override
