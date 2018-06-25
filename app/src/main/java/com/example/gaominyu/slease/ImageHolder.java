@@ -11,17 +11,25 @@ public class ImageHolder {
 
     private ImageHolder () {}
 
+    public ArrayList<Bitmap> getImages() {
+        return this.images;
+    }
+
     public void setImages(ArrayList<Bitmap> images) {
         this.images = images;
     }
 
-    public ImageHolder getSingleton() {
+    public static ImageHolder getSingleton() {
         if (singleton == null)
             singleton = new ImageHolder();
         return singleton;
     }
 
     public void clearHolder() {
-        this.images.clear();
+        this.images = new ArrayList<>();
+    }
+
+    public boolean isEmpty() {
+        return this.images.isEmpty();
     }
 }

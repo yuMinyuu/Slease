@@ -1,22 +1,28 @@
 package com.example.gaominyu.slease;
 
-import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.GridLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class CreateActivity extends AppCompatActivity {
+
+    private GridLayout gridLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,9 +32,8 @@ public class CreateActivity extends AppCompatActivity {
         // Programmatically initialize the spinner for categories
         initSimpleSpinner();
 
-        // Get images from PhotoActivity
-        Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
+        // Get images from ImageHolder to set up image gridlist
+        initGridLayout();
     }
 
     private void initSimpleSpinner() {
@@ -94,7 +99,38 @@ public class CreateActivity extends AppCompatActivity {
             }
 
         });
-    }// Do not touch this !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    }
+
+    private void initGridLayout() {
+
+        ImageHolder imageHolder = ImageHolder.getSingleton();
+        if(imageHolder.isEmpty())
+            return;
+        ArrayList<Bitmap> images = imageHolder.getImages();
+
+        // Create a FrameLayout of image with cross button for each Bitmap file
+        gridLayout = findViewById(R.id.create_images);
+        for(Iterator<Bitmap> it = images.iterator(); it.hasNext();){
+
+            final FrameLayout frameLayout = new FrameLayout(getApplicationContext());
+            gridLayout.addView(frameLayout);
+            final ImageView imageView = new ImageView(getApplicationContext());
+            Bitmap bmp = it.next();
+            imageView.setImageBitmap(Bitmap.createScaledBitmap(bmp, 320,426, false));
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(160, 160);
+            lp.setMargins(10, 20, 10, 0);
+            imageView.setLayoutParams(lp);
+            frameLayout.addView(imageView);
+            Button crossButton = new Button(getApplicationContext());
+            crossButton.setBackgroundResource(R.drawable.cross16);
+            crossButton.setLayoutParams(new FrameLayout.LayoutParams(40, 40));
+            frameLayout.addView(crossButton);
+            bmp.recycle();
+
+        }
+    }
+
+// Do not touch above !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
 //    public boolean onOptionsItemSelected(MenuItem item){

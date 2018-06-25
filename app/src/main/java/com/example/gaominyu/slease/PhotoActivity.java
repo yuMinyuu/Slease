@@ -68,21 +68,23 @@ public class PhotoActivity extends AppCompatActivity {
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(PhotoActivity.this, CreateActivity.class);
-                Bundle extras = new Bundle();
+
+                // Create static instance of ImageHolder class to hold the images temporarily
+                ArrayList<Bitmap> images = new ArrayList<>();
                 for(int i = 0 ; i < linearLayout.getChildCount(); i++) {
                     FrameLayout frameLayout = (FrameLayout)linearLayout.getChildAt(i);
                     ImageView imageView = (ImageView)frameLayout.getChildAt(0);
                     Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                    byte[] byteArray = stream.toByteArray();
-                    bitmap.recycle();
-                    extras.putByteArray(String.valueOf(i), byteArray);
+                    images.add(bitmap);
                 }
-                if(!extras.isEmpty())
-                    intent.putExtras(extras);
+                ImageHolder imageHolder = ImageHolder.getSingleton();
+                imageHolder.clearHolder();
+                imageHolder.setImages(images);
+
+                // Go to CreateActivity
+                Intent intent = new Intent(PhotoActivity.this, CreateActivity.class);
                 startActivity(intent);
+
             }
         });
     }
