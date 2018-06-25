@@ -1,7 +1,9 @@
 package com.example.gaominyu.slease;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -46,7 +49,7 @@ public class CreateActivity extends AppCompatActivity {
 
         // Spinner Drop down elements with some trumped-up examples of choices
         List<String> languages = new ArrayList<String>();
-        languages.add("");
+        languages.add("Select One");
         languages.add("Drone");
         languages.add("Camera");
         languages.add("Costume");
@@ -140,10 +143,12 @@ public class CreateActivity extends AppCompatActivity {
         ImageHolder imageHolder = ImageHolder.getSingleton();
         if(imageHolder.isEmpty())
             return;
+        int size = imageHolder.count();
         ArrayList<Bitmap> images = imageHolder.getImages();
+        gridLayout = findViewById(R.id.create_images);
+        final ImageButton imageButton = new ImageButton(getApplicationContext());
 
         // Create a FrameLayout of image with cross button for each Bitmap file
-        gridLayout = findViewById(R.id.create_images);
         for(Iterator<Bitmap> it = images.iterator(); it.hasNext();){
 
             final FrameLayout frameLayout = new FrameLayout(getApplicationContext());
@@ -161,6 +166,47 @@ public class CreateActivity extends AppCompatActivity {
             frameLayout.addView(crossButton);
             bmp.recycle();
 
+            // Remove this entire framelayout when clicking its containing cross button and
+            // delete its image file from imageList
+            crossButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    gridLayout.removeView(frameLayout);
+                    if(gridLayout.getChildCount() < 10) {
+                        imageButton.setVisibility(View.VISIBLE);
+                    }
+                }
+            });
+        }
+
+        // Add a imageButton behind to allow more images to be added
+        imageButton.setBackgroundResource(R.drawable.plus);
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                // Create static instance of ImageHolder class to hold the images temporarily
+                ArrayList<Bitmap> images = new ArrayList<>();
+                for(int i = 0 ; i < gridLayout.getChildCount() - 1; i++) {
+                    FrameLayout frameLayout = (FrameLayout)gridLayout.getChildAt(i);
+                    ImageView imageView = (ImageView)frameLayout.getChildAt(0);
+                    Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
+                    images.add(bitmap);
+                }
+                ImageHolder imageHolder = ImageHolder.getSingleton();
+                imageHolder.clearHolder();
+                imageHolder.setImages(images);
+
+                // Go to CreateActivity
+                Intent intent = new Intent(CreateActivity.this, PhotoActivity.class);
+                startActivity(intent);
+            }
+        });
+        imageButton.setLayoutParams(new FrameLayout.LayoutParams(160, 160));
+        gridLayout.addView(imageButton);
+
+        if(size >= 9 ) {
+            imageButton.setVisibility(View.GONE);
         }
     }
 
