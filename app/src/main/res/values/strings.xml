@@ -11,4 +11,6 @@
     <string name="SignupButton">SIGN UP</string>
     <string name="SignUp_Repassword">Re-enter Password</string>
     <string name="create_publish">Publish</string>
+    <string name="facebook_app_id">207063893255542</string>
+    <string name="fb_login_protocol_scheme">fb207063893255542</string>
 </resources>
