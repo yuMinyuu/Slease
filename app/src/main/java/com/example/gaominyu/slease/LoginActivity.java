@@ -32,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
 
-    private Button mFacebookBtn;
+    private Button mFacebookBtn, mLoginBtn;
 
     private static final String TAG;
 
@@ -52,8 +52,17 @@ public class LoginActivity extends AppCompatActivity {
 
         mFacebookBtn = (Button) findViewById(R.id.facebookBtn) ;
 
+        mLoginBtn = (Button) findViewById(R.id.loginBtn);
+
         // Initialize Facebook Login button
         mCallbackManager = CallbackManager.Factory.create();
+
+        mLoginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginActivity.this, BrowseActivity.class));
+            }
+        });
 
         mFacebookBtn.setOnClickListener(new View.OnClickListener() {
             @Override

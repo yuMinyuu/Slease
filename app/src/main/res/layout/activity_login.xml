@@ -56,9 +56,9 @@
 
 
     <Button
-        android:id="@+id/facebookBtn"
-        android:layout_width="252dp"
-        android:layout_height="28dp"
+        android:id="@+id/loginBtn"
+        android:layout_width="123dp"
+        android:layout_height="35dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="60dp"
@@ -67,7 +67,7 @@
         android:background="@color/btmGradient_start"
         android:fontFamily="monospace"
         android:lineSpacingExtra="18sp"
-        android:text="@string/LoginWithFacebook"
+        android:text="@string/Login"
         android:textAllCaps="false"
         android:textAppearance="@style/TextAppearance.AppCompat"
         android:textColor="@android:color/white"
@@ -95,5 +95,13 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/facebookBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/LoginWithFacebook"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="535dp" />
 
 </android.support.constraint.ConstraintLayout>
