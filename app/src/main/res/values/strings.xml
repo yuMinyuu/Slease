@@ -11,4 +11,7 @@
     <string name="SignupButton">SIGN UP</string>
     <string name="SignUp_Repassword">Re-enter Password</string>
     <string name="create_publish">Publish</string>
+    <string name="bottomnav_title_0">Browse</string>
+    <string name="bottomnav_title_1">Activity</string>
+    <string name="bottomnav_title_2">My Profile</string>
 </resources>
