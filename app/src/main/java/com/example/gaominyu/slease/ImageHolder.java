@@ -25,8 +25,6 @@ public class ImageHolder {
         return singleton;
     }
 
-    public int count() { return this.images.size();}
-
     public void clearHolder() {
         this.images = new ArrayList<>();
     }

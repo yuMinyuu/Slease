@@ -15,8 +15,12 @@
       },
       "oauth_client": [
         {
-          "client_id": "1059211856145-j1cql76e9ql6ej1f2cuncb8jfp10olof.apps.googleusercontent.com",
-          "client_type": 3
+          "client_id": "1059211856145-60rqt2416tid2cdbs40ifbq6aqq3kqvj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.gaominyu.slease",
+            "certificate_hash": "4a9e012ce1b81d39fd61e42b47c1ae512176f595"
+          }
         },
         {
           "client_id": "1059211856145-j1cql76e9ql6ej1f2cuncb8jfp10olof.apps.googleusercontent.com",
@@ -33,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1059211856145-j1cql76e9ql6ej1f2cuncb8jfp10olof.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2
