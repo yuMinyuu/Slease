@@ -17,5 +17,5 @@
     <string name="facebook_app_id">207063893255542</string>
     <string name="fb_login_protocol_scheme">fb207063893255542</string>
     <string name="LoginWithFacebook">Login With Facebook</string>
-    <string name="Login">Login</string>
+    <string name="Login_button">Log In</string>
 </resources>

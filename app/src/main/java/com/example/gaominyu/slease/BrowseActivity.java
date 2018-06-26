@@ -56,8 +56,7 @@ public class BrowseActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.directory, menu);
 
         MenuItem searchItem = menu.findItem(R.id.action_searchs);
-        SearchView searchView =
-                (SearchView) searchItem.getActionView();
+        SearchView searchView = (SearchView) searchItem.getActionView();
 
         // TO DO
         // Configure the search info and add any event listeners...

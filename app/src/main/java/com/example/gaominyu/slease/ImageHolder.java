@@ -11,13 +11,9 @@ public class ImageHolder {
 
     private ImageHolder () {}
 
-    public ArrayList<Bitmap> getImages() {
-        return this.images;
-    }
+    public ArrayList<Bitmap> getImages() { return this.images; }
 
-    public void setImages(ArrayList<Bitmap> images) {
-        this.images = images;
-    }
+    public void setImages(ArrayList<Bitmap> images) { this.images = images; }
 
     public static ImageHolder getSingleton() {
         if (singleton == null)
@@ -25,11 +21,9 @@ public class ImageHolder {
         return singleton;
     }
 
-    public void clearHolder() {
-        this.images = new ArrayList<>();
-    }
+    public int count() { return this.images.size();}
 
-    public boolean isEmpty() {
-        return this.images.isEmpty();
-    }
+    public void clearHolder() { this.images = new ArrayList<>(); }
+
+    public boolean isEmpty() { return this.images.isEmpty(); }
 }
