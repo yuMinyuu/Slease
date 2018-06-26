@@ -14,4 +14,7 @@
     <string name="bottomnav_title_0">Browse</string>
     <string name="bottomnav_title_1">Activity</string>
     <string name="bottomnav_title_2">My Profile</string>
+    <string name="facebook_app_id">207063893255542</string>
+    <string name="fb_login_protocol_scheme">fb207063893255542</string>
+    <string name="LoginWithFacebook">Login With Facebook</string>
 </resources>
