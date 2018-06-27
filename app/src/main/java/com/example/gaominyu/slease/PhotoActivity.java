@@ -1,5 +1,6 @@
 package com.example.gaominyu.slease;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class PhotoActivity extends AppCompatActivity {
@@ -30,11 +32,17 @@ public class PhotoActivity extends AppCompatActivity {
     private LinearLayout linearLayout;
     private boolean safeToTakePicture = true;
     private final int maxSize = 9;
+    private boolean isCallBack = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
+
+        // Check if this is call back activity by CreateActivity or new activity
+        Bundle extras = getIntent().getExtras();
+        if(extras != null)
+            isCallBack = extras.getBoolean("isCallBack");
 
         // Object instantiation
         btnTakePhoto = findViewById(R.id.photo_button1);
@@ -42,9 +50,25 @@ public class PhotoActivity extends AppCompatActivity {
         linearLayout = findViewById(R.id.photo_thumbnails);
         btnNext = findViewById(R.id.photo_button2);
 
+        // Initialze list of images from previous activity
+        if(isCallBack) {
+
+            ImageHolder imageHolder = ImageHolder.getSingleton();
+            if(!imageHolder.isEmpty()) {
+                ArrayList<Bitmap> images = imageHolder.getImages();
+                for (Iterator<Bitmap> it = images.iterator(); it.hasNext(); ) {
+                    initLinearLayout(it.next());
+                }
+            }
+        }
+
         // Set button1's text to the remaining number of space available for imageList
         btnTakePhoto.setText(String.valueOf(maxSize - linearLayout.getChildCount()));
         btnTakePhoto.setTextSize(30);
+
+        // Check if button next should be made visible
+        if(linearLayout.getChildCount() >0)
+            btnNext.setVisibility(View.VISIBLE);
 
         // Open the camera
         camera = Camera.open();
@@ -81,10 +105,14 @@ public class PhotoActivity extends AppCompatActivity {
                 imageHolder.clearHolder();
                 imageHolder.setImages(images);
 
-                // Go to CreateActivity
-                Intent intent = new Intent(PhotoActivity.this, CreateActivity.class);
-                startActivity(intent);
-
+                // Go to new CreateActivity for new lease or Go back to CreateActivity that called this
+                if(isCallBack) {
+                    setResult(Activity.RESULT_OK, null);
+                    finish();
+                } else {
+                    Intent intent = new Intent(PhotoActivity.this, CreateActivity.class);
+                    startActivity(intent);
+                }
             }
         });
     }
@@ -98,22 +126,9 @@ public class PhotoActivity extends AppCompatActivity {
 
                     camera.startPreview();
 
-                    // Append a new framelayout containing an imageView and a cross button in the
-                    // linearlayout of horizontalscrollview. Its imageView should contain the image
-                    // that we just took
-                    final FrameLayout frameLayout = new FrameLayout(getApplicationContext());
-                    linearLayout.addView(frameLayout);
-                    final ImageView imageView = new ImageView(getApplicationContext());
+                    // add this image into the list of images taken
                     Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
-                    imageView.setImageBitmap(Bitmap.createScaledBitmap(bmp, 320,426, false));
-                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(160, 160);
-                    lp.setMargins(10, 20, 10, 0);
-                    imageView.setLayoutParams(lp);
-                    frameLayout.addView(imageView);
-                    Button crossButton = new Button(getApplicationContext());
-                    crossButton.setBackgroundResource(R.drawable.cross16);
-                    crossButton.setLayoutParams(new FrameLayout.LayoutParams(40, 40));
-                    frameLayout.addView(crossButton);
+                    initLinearLayout(bmp);
 
                     // Update the button to show how many more pictures can you take
                     int diff = maxSize - linearLayout.getChildCount();
@@ -123,34 +138,6 @@ public class PhotoActivity extends AppCompatActivity {
                         btnTakePhoto.setEnabled(false);
                     }
 
-                    // Remove this entire framelayout when clicking its containing cross button and
-                    // delete its image file from imageList
-                    crossButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            linearLayout.removeView(frameLayout);
-                            btnTakePhoto.setEnabled(true);
-                            btnTakePhoto.setAlpha(1);
-                            btnTakePhoto.setText(String.valueOf(maxSize - linearLayout.getChildCount()));
-                            if(linearLayout.getChildCount() <= 0) {
-                                btnNext.setVisibility(View.INVISIBLE);
-                            }
-                        }
-                    });
-
-                    imageView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-
-                        }
-                    });
-
-                    // To free up memory space from bitmap decoding
-                    if(bmp!=null) {
-                        bmp.recycle();
-                        bmp = null;
-                    }
-
                     // Toggle the btnNext to appear because there is guaranteed content inside now
                     btnNext.setVisibility(View.VISIBLE);
 
@@ -158,6 +145,53 @@ public class PhotoActivity extends AppCompatActivity {
                     safeToTakePicture = true;
                 }
             });
+        }
+    }
+
+    protected void initLinearLayout(Bitmap bmp) {
+
+        // Append a new framelayout containing an imageView and a cross button in the
+        // linearlayout of horizontalscrollview. Its imageView should contain the image
+        // that we just took
+        final FrameLayout frameLayout = new FrameLayout(getApplicationContext());
+        linearLayout.addView(frameLayout);
+        final ImageView imageView = new ImageView(getApplicationContext());
+        imageView.setImageBitmap(Bitmap.createScaledBitmap(bmp, 320,426, false));
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(160, 160);
+        lp.setMargins(10, 20, 10, 0);
+        imageView.setLayoutParams(lp);
+        frameLayout.addView(imageView);
+        Button crossButton = new Button(getApplicationContext());
+        crossButton.setBackgroundResource(R.drawable.cross16);
+        crossButton.setLayoutParams(new FrameLayout.LayoutParams(40, 40));
+        frameLayout.addView(crossButton);
+
+        // Remove this entire framelayout when clicking its containing cross button and
+        // delete its image file from imageList
+        crossButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                linearLayout.removeView(frameLayout);
+                btnTakePhoto.setEnabled(true);
+                btnTakePhoto.setAlpha(1);
+                btnTakePhoto.setText(String.valueOf(maxSize - linearLayout.getChildCount()));
+                if(linearLayout.getChildCount() <= 0) {
+                    btnNext.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TO DO for previewing each image taken
+            }
+        });
+
+        // To free up memory space from bitmap decoding
+        if(bmp!=null) {
+            bmp.recycle();
+            bmp = null;
         }
     }
 }

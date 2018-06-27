@@ -27,6 +27,7 @@ import java.util.List;
 public class CreateActivity extends AppCompatActivity {
 
     private GridLayout gridLayout;
+    private static final int TAKE_MORE_PHOTO_REQUEST = 1;  // The request code for callback
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +39,14 @@ public class CreateActivity extends AppCompatActivity {
         initSecondSpinner();
 
         // Get images from ImageHolder to set up image GridList
-        initGridLayout();
+        initGridLayout(false);
+    }
+
+    @Override
+    public void onResume()
+    {  // After a pause OR at startup
+        super.onResume();
+        //Refresh your stuff here
     }
 
     private void initFirstSpinner() {
@@ -138,14 +146,17 @@ public class CreateActivity extends AppCompatActivity {
         });
     }
 
-    private void initGridLayout() {
+    private void initGridLayout(boolean isCallBack) {
 
+        gridLayout = findViewById(R.id.create_images);
+        if(isCallBack) {
+            gridLayout.removeAllViews();
+        }
         ImageHolder imageHolder = ImageHolder.getSingleton();
         if(imageHolder.isEmpty())
             return;
         int size = imageHolder.count();
         ArrayList<Bitmap> images = imageHolder.getImages();
-        gridLayout = findViewById(R.id.create_images);
         final ImageButton imageButton = new ImageButton(getApplicationContext());
 
         // Create a FrameLayout of image with cross button for each Bitmap file
@@ -197,9 +208,10 @@ public class CreateActivity extends AppCompatActivity {
                 imageHolder.clearHolder();
                 imageHolder.setImages(images);
 
-                // Go to CreateActivity
+                // Go to PhotoActivity
                 Intent intent = new Intent(CreateActivity.this, PhotoActivity.class);
-                startActivity(intent);
+                intent.putExtra("isCallBack", true);
+                startActivityForResult(intent, TAKE_MORE_PHOTO_REQUEST);
             }
         });
         imageButton.setLayoutParams(new FrameLayout.LayoutParams(160, 160));
@@ -207,6 +219,18 @@ public class CreateActivity extends AppCompatActivity {
 
         if(size >= 9 ) {
             imageButton.setVisibility(View.GONE);
+        }
+    }
+
+    // When the user is done with adding more photos, the system calls this to reset image list
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == TAKE_MORE_PHOTO_REQUEST) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                initGridLayout(true);
+            }
         }
     }
 
