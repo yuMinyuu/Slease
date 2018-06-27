@@ -1,13 +1,12 @@
 package com.example.gaominyu.slease;
 
-        import android.app.Fragment;
         import android.content.Intent;
-        import android.graphics.Color;
+        import android.net.Uri;
         import android.support.annotation.NonNull;
-        import android.support.design.internal.BottomNavigationMenu;
-        import android.support.design.internal.BottomNavigationMenuView;
         import android.support.design.widget.BottomNavigationView;
         import android.support.design.widget.FloatingActionButton;
+        import android.support.v4.app.Fragment;
+        import android.support.v4.app.FragmentTransaction;
         import android.support.v7.app.ActionBar;
         import android.support.v7.app.AppCompatActivity;
         import android.os.Bundle;
@@ -16,12 +15,13 @@ package com.example.gaominyu.slease;
         import android.view.Menu;
         import android.view.MenuItem;
         import android.view.View;
-        import android.widget.Button;
 
-        import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
-        import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 
-public class BrowseActivity extends AppCompatActivity {
+
+public class BrowseActivity extends AppCompatActivity
+        implements BrowseFragment.OnFragmentInteractionListener,
+                    ActivityFragment.OnFragmentInteractionListener,
+                    ProfileFragment.OnFragmentInteractionListener{
 
     private ActionBar toolbar;
     private BottomNavigationView bottomNavigationView;
@@ -47,7 +47,10 @@ public class BrowseActivity extends AppCompatActivity {
         //Set up Bottom Navigation Bar at bottom
         toolbar = getSupportActionBar();
         initBottomNavBar();
-        toolbar.setTitle("Shop");
+
+        // load the BrowseFragment by default
+        toolbar.setTitle("Browse");
+        loadFragment(new BrowseFragment());
     }
 
     @Override
@@ -99,15 +102,34 @@ public class BrowseActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_browse:
                     toolbar.setTitle("Browse");
+                    fragment = new BrowseFragment();
+                    loadFragment(fragment);
                     return true;
                 case R.id.navigation_activity:
                     toolbar.setTitle("Activity");
+                    fragment = new ActivityFragment();
+                    loadFragment(fragment);
                     return true;
                 case R.id.navigation_profile:
                     toolbar.setTitle("My Profile");
+                    fragment = new ProfileFragment();
+                    loadFragment(fragment);
                     return true;
             }
             return false;
         }
     };
+
+    private void loadFragment(Fragment fragment) {
+        // load fragment
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frame_container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri){
+        //you can leave it empty
+    }
 }
