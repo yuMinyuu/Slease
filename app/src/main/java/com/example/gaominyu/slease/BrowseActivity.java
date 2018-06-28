@@ -4,6 +4,7 @@ package com.example.gaominyu.slease;
         import android.net.Uri;
         import android.support.annotation.NonNull;
         import android.support.design.widget.BottomNavigationView;
+        import android.support.design.widget.CoordinatorLayout;
         import android.support.design.widget.FloatingActionButton;
         import android.support.v4.app.Fragment;
         import android.support.v4.app.FragmentTransaction;
@@ -46,7 +47,13 @@ public class BrowseActivity extends AppCompatActivity
 
         //Set up Bottom Navigation Bar at bottom
         toolbar = getSupportActionBar();
-        initBottomNavBar();
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        // attaching bottom sheet behaviour - hide / show on scroll
+        CoordinatorLayout.LayoutParams layoutParams =
+                (CoordinatorLayout.LayoutParams) bottomNavigationView.getLayoutParams();
+        layoutParams.setBehavior(new BottomNavigationBehavior());
 
         // load the BrowseFragment by default
         toolbar.setTitle("Browse");
@@ -84,13 +91,6 @@ public class BrowseActivity extends AppCompatActivity
                 return super.onOptionsItemSelected(item);
 
         }
-    }
-
-    protected void initBottomNavBar() {
-
-        bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
