@@ -36,7 +36,7 @@ dependencies {
     // For Facebook Auth
     implementation 'com.facebook.android:facebook-login:[4,5]'
 
-    // For recycled GridView in Fragment
+    // For recycled GridView in Fragment using Json through Volley Library HTTP support
     implementation 'com.android.support:recyclerview-v7:27.1.1'
     implementation 'com.android.volley:volley:1.0.0'
     implementation 'com.google.code.gson:gson:2.8.0'

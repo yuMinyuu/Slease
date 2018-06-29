@@ -1,5 +1,6 @@
 package com.example.gaominyu.slease;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.CoordinatorLayout;
@@ -10,8 +11,11 @@ import android.widget.FrameLayout;
 
 public class BottomNavigationBehavior extends CoordinatorLayout.Behavior<BottomNavigationView> {
 
-    public BottomNavigationBehavior() {
+    private Context context;
+
+    public BottomNavigationBehavior(Context context) {
         super();
+        this.context = context;
     }
 
     public BottomNavigationBehavior(Context context, AttributeSet attrs) {
@@ -30,11 +34,21 @@ public class BottomNavigationBehavior extends CoordinatorLayout.Behavior<BottomN
     }
 
     @Override
-    public void onNestedPreScroll(CoordinatorLayout coordinatorLayout, BottomNavigationView child, View target, int dx, int dy, int[] consumed, int type) {
+    public void onNestedPreScroll(CoordinatorLayout coordinatorLayout, final BottomNavigationView child, View target, int dx, int dy, int[] consumed, int type) {
         if (dy < 0) {
-            showBottomNavigationView(child);
+            ((Activity)context).runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    showBottomNavigationView(child); // Run this on view instead to improve performance
+                }
+            });
         } else if (dy > 0) {
-            hideBottomNavigationView(child);
+            ((Activity)context).runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    hideBottomNavigationView(child); // Run this on view instead to improve performance
+                }
+            });
         }
     }
 
