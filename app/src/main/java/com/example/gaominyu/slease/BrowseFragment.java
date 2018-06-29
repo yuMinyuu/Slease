@@ -30,10 +30,6 @@ import org.json.JSONArray;
 import java.util.ArrayList;
 import java.util.List;
 
-//import info.androidhive.bottomnavigation.Movie;
-//import info.androidhive.bottomnavigation.app.MyApplication;
-//import info.androidhive.bottomnavigation.R;
-
 public class BrowseFragment extends Fragment {
 
     private static final String TAG = BrowseFragment.class.getSimpleName();
@@ -75,6 +71,12 @@ public class BrowseFragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
         recyclerView.setNestedScrollingEnabled(false);
+
+//        //Tried these to reduce Jank cases
+//        recyclerView.setHasFixedSize(true);
+//        recyclerView.setItemViewCacheSize(10);
+//        recyclerView.setDrawingCacheEnabled(true);
+//        recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
 
         fetchLeasedItems();
 
