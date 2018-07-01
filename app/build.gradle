@@ -40,9 +40,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:16.0.1'
 
     // For Facebook Auth
-    implementation 'com.google.firebase:firebase-core:11.6.0'
-    implementation 'com.google.firebase:firebase-auth:11.6.0'
-    implementation 'com.facebook.android:facebook-login:[4,5]'
+    implementation 'com.google.firebase:firebase-core:16.0.1'
+    implementation 'com.google.firebase:firebase-auth:16.0.2'
+    implementation 'com.facebook.android:facebook-login:4.34.0'
 
     // For recycled GridView in Fragment using Json through Volley Library HTTP support
     implementation 'com.android.support:recyclerview-v7:27.1.1'
