@@ -51,13 +51,13 @@ public class BrowseActivity extends AppCompatActivity
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         // attaching bottom sheet behaviour - hide / show on scroll
-        CoordinatorLayout.LayoutParams layoutParams =
-                (CoordinatorLayout.LayoutParams) bottomNavigationView.getLayoutParams();
-        layoutParams.setBehavior(new BottomNavigationBehavior(this));
+        //CoordinatorLayout.LayoutParams layoutParams =
+        //       (CoordinatorLayout.LayoutParams) bottomNavigationView.getLayoutParams();
+        //layoutParams.setBehavior(new BottomNavigationBehavior(this));
 
         // load the BrowseFragment by default
         toolbar.setTitle("Browse");
-        loadFragment(new BrowseFragment());
+        //loadFragment(new BrowseFragment());
     }
 
     @Override
