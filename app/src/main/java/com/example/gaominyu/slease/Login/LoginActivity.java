@@ -40,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
 
-    private Button mFacebookBtn, mLoginBtn;
+    private Button mFacebookLoginBtn, mLoginBtn;
 
     private static final String TAG;
 
@@ -57,9 +57,9 @@ public class LoginActivity extends AppCompatActivity {
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
-        mFacebookBtn = (Button) findViewById(R.id.facebookBtn) ;
+        mFacebookLoginBtn = findViewById(R.id.btn_facebookLogin) ;
 
-        mLoginBtn = (Button) findViewById(R.id.loginBtn);
+        mLoginBtn = findViewById(R.id.loginBtn);
 
         // Initialize Facebook Login button
         mCallbackManager = CallbackManager.Factory.create();
@@ -71,11 +71,11 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        mFacebookBtn.setOnClickListener(new View.OnClickListener() {
+        mFacebookLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                mFacebookBtn.setEnabled(false);
+                mFacebookLoginBtn.setEnabled(false);
                 LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("email", "public_profile"));
                 LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
                     @Override
@@ -140,7 +140,7 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
 
-                            mFacebookBtn.setEnabled(true);
+                            mFacebookLoginBtn.setEnabled(true);
 
                             updateUI();
                         } else {
@@ -149,7 +149,7 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
 
-                            mFacebookBtn.setEnabled(true);
+                            mFacebookLoginBtn.setEnabled(true);
 
                             updateUI();
                         }
