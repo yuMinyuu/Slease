@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-        android:name=".VolleySingleton"
+        android:name=".Main.VolleySingleton"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -18,7 +18,7 @@
         <meta-data android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
 
-        <activity android:name=".LoginActivity"
+        <activity android:name=".Login.LoginActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,17 +27,17 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".SignupActivity"
+        <activity android:name=".Login.SignupActivity"
             android:screenOrientation="portrait"/>
 
-        <activity android:name=".BrowseActivity"
+        <activity android:name=".Main.BrowseActivity"
             android:screenOrientation="portrait"/>
 
-        <activity android:name=".CreateActivity"
+        <activity android:name=".Create.CreateActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"/>
 
-        <activity android:name=".PhotoActivity"
+        <activity android:name=".Create.PhotoActivity"
             android:screenOrientation="portrait"/>
 
         <activity android:name="com.facebook.FacebookActivity"
