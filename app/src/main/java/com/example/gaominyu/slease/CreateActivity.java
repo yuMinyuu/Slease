@@ -20,14 +20,16 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class CreateActivity extends AppCompatActivity {
 
-    private GridLayout gridLayout;
     private static final int TAKE_MORE_PHOTO_REQUEST = 1;  // The request code for callback
+    private GridLayout gridLayout;
+    private Button submit_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,9 @@ public class CreateActivity extends AppCompatActivity {
 
         // Get images from ImageHolder to set up image GridList
         initGridLayout(false);
+
+        // Submit all contents to RealTime Database
+        initSubmitButton();
     }
 
     @Override
@@ -232,6 +237,18 @@ public class CreateActivity extends AppCompatActivity {
                 initGridLayout(true);
             }
         }
+    }
+
+    protected  void initSubmitButton () {
+
+        submit_button = findViewById(R.id.submit_button);
+
+        submit_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
 // Do not touch above !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
