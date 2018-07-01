@@ -1,4 +1,4 @@
-package com.example.gaominyu.slease;
+package com.example.gaominyu.slease.Main;
 
 import android.app.Application;
 import android.text.TextUtils;

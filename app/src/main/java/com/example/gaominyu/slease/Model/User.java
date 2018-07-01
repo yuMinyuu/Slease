@@ -1,4 +1,4 @@
-package com.example.gaominyu.slease;
+package com.example.gaominyu.slease.Model;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 

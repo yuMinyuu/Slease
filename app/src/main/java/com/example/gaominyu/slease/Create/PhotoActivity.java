@@ -1,4 +1,4 @@
-package com.example.gaominyu.slease;
+package com.example.gaominyu.slease.Create;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -14,12 +14,11 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
+import com.example.gaominyu.slease.R;
+
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 public class PhotoActivity extends AppCompatActivity {
 

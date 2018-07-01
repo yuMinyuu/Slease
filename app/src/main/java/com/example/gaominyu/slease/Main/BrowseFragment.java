@@ -1,4 +1,4 @@
-package com.example.gaominyu.slease;
+package com.example.gaominyu.slease.Main;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -22,6 +22,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.bumptech.glide.Glide;
+import com.example.gaominyu.slease.Model.Item;
+import com.example.gaominyu.slease.R;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 

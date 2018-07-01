@@ -1,10 +1,9 @@
-package com.example.gaominyu.slease;
+package com.example.gaominyu.slease.Main;
 
         import android.content.Intent;
         import android.net.Uri;
         import android.support.annotation.NonNull;
         import android.support.design.widget.BottomNavigationView;
-        import android.support.design.widget.CoordinatorLayout;
         import android.support.design.widget.FloatingActionButton;
         import android.support.v4.app.Fragment;
         import android.support.v4.app.FragmentTransaction;
@@ -17,6 +16,8 @@ package com.example.gaominyu.slease;
         import android.view.MenuItem;
         import android.view.View;
 
+        import com.example.gaominyu.slease.Create.PhotoActivity;
+        import com.example.gaominyu.slease.R;
 
 
 public class BrowseActivity extends AppCompatActivity
