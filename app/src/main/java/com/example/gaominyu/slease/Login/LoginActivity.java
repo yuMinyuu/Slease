@@ -79,43 +79,6 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d(TAG, "facebook:onSuccess:" + loginResult);
                         Toast.makeText(getApplicationContext(), "facebook login successful", Toast.LENGTH_SHORT).show();
                         handleFacebookAccessToken(loginResult.getAccessToken());
-                        Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
-                        startActivity(intent);
-//                        userData = intent.getExtras();
-//                        GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
-//                            @Override
-//                            public void onCompleted(JSONObject object, GraphResponse response) {
-//                                Log.d("response", response.toString());
-//
-//                                try{
-//
-//                                    String user_id = object.getString("id");
-//                                    String name = object.getString("name");
-//                                    String email = object.getString("email");
-//                                    String profilepic_url = object.getString("link");
-//
-////                                    URL profile__picture = new URL("https://graph.facebook.com/" + object.getString("id") + "/picture?width=250&height=250");
-////
-////                                    // Load user's Facebook Data into the app here
-////                                    Log.d("data", object.getString("id"));
-////                                    //userData.putString("userId", object.getString("id"));
-////                                    Log.d("data", object.getString("email"));
-////                                    userData.putString("email", object.getString("email"));
-////                                    Log.d("data", object.getString("name"));
-////                                    userData.putString("name", object.getString("name"));
-////
-////                                } catch (MalformedURLException e) {
-////                                    e.printStackTrace();
-//                                } catch (JSONException e) {
-//                                    e.printStackTrace();
-//                                }
-//                            }
-//                        });
-//                        Bundle parameters = new Bundle();
-//                        parameters.putString("fields", "id,name,email,link");
-//                        request.setParameters(parameters);
-//                        request.executeAsync();
-//                        startActivity(intent, userData);
                     }
 
                     @Override
@@ -133,10 +96,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        // If already logged in, go to BrowseActivity
-        if(mAuth.getCurrentUser() != null) {
-            startActivity(new Intent(LoginActivity.this, BrowseActivity.class));
-        }
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -185,6 +144,8 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
+                            Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+                            startActivity(intent);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
