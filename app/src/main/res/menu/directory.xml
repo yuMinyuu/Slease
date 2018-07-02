@@ -20,5 +20,6 @@
         android:title="Log Out"
         android:actionViewClass=""
         android:actionLayout="@layout/activity_browse"
+        android:visible="false"
         app:showAsAction="never"/>
 </menu>

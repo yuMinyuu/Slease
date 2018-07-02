@@ -18,8 +18,11 @@ package com.example.gaominyu.slease.Main;
         import android.view.View;
 
         import com.example.gaominyu.slease.Create.PhotoActivity;
+        import com.example.gaominyu.slease.Login.LoginActivity;
         import com.example.gaominyu.slease.R;
         import com.facebook.login.LoginManager;
+        import com.google.firebase.auth.FirebaseAuth;
+        import com.google.firebase.auth.FirebaseUser;
 
 
 public class BrowseActivity extends AppCompatActivity
@@ -29,11 +32,17 @@ public class BrowseActivity extends AppCompatActivity
 
     private ActionBar toolbar;
     private BottomNavigationView bottomNavigationView;
+    private FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_browse);
+
+        // go to login activity if no user if logged in
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user == null)
+            startActivity(new Intent(this, LoginActivity.class));
 
         // Set up top bar
         Toolbar topToolbar = findViewById(R.id.top_toolbar);
@@ -75,14 +84,8 @@ public class BrowseActivity extends AppCompatActivity
         // Configure the search info and add any event listeners...
 
         MenuItem logOutItem = menu.findItem(R.id.action_logOut);
-        logOutItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                LoginManager.getInstance().logOut();
-                return true;
-            }
-        });
+        if(user != null)
+            logOutItem.setVisible(true);
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -96,6 +99,13 @@ public class BrowseActivity extends AppCompatActivity
 
             case R.id.action_searchs:
                 // User chose the "Search" action, activate text input and search button
+                return true;
+
+            case R.id.action_logOut:
+                // User chose the "Log out" action, log out of current account
+                FirebaseAuth.getInstance().signOut();
+                LoginManager.getInstance().logOut();
+                recreate(); // go back to login activity upon log out
                 return true;
 
             default:

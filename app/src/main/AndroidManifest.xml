@@ -19,6 +19,12 @@
             android:value="@string/facebook_app_id"/>
 
         <activity android:name=".Login.LoginActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".Login.SignupActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".Main.BrowseActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,12 +32,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".Login.SignupActivity"
-            android:screenOrientation="portrait"/>
-
-        <activity android:name=".Main.BrowseActivity"
-            android:screenOrientation="portrait"/>
 
         <activity android:name=".Create.CreateActivity"
             android:screenOrientation="portrait"
