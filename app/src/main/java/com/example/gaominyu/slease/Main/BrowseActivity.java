@@ -4,6 +4,7 @@ package com.example.gaominyu.slease.Main;
         import android.net.Uri;
         import android.support.annotation.NonNull;
         import android.support.design.widget.BottomNavigationView;
+        import android.support.design.widget.CoordinatorLayout;
         import android.support.design.widget.FloatingActionButton;
         import android.support.v4.app.Fragment;
         import android.support.v4.app.FragmentTransaction;
@@ -18,6 +19,7 @@ package com.example.gaominyu.slease.Main;
 
         import com.example.gaominyu.slease.Create.PhotoActivity;
         import com.example.gaominyu.slease.R;
+        import com.facebook.login.LoginManager;
 
 
 public class BrowseActivity extends AppCompatActivity
@@ -52,13 +54,13 @@ public class BrowseActivity extends AppCompatActivity
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         // attaching bottom sheet behaviour - hide / show on scroll
-        //CoordinatorLayout.LayoutParams layoutParams =
-        //       (CoordinatorLayout.LayoutParams) bottomNavigationView.getLayoutParams();
-        //layoutParams.setBehavior(new BottomNavigationBehavior(this));
+        CoordinatorLayout.LayoutParams layoutParams =
+               (CoordinatorLayout.LayoutParams) bottomNavigationView.getLayoutParams();
+        layoutParams.setBehavior(new BottomNavigationBehavior(this));
 
         // load the BrowseFragment by default
         toolbar.setTitle("Browse");
-        //loadFragment(new BrowseFragment());
+        loadFragment(new BrowseFragment());
     }
 
     @Override
@@ -71,6 +73,16 @@ public class BrowseActivity extends AppCompatActivity
 
         // TO DO
         // Configure the search info and add any event listeners...
+
+        MenuItem logOutItem = menu.findItem(R.id.action_logOut);
+        logOutItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                LoginManager.getInstance().logOut();
+                return true;
+            }
+        });
 
         return super.onCreateOptionsMenu(menu);
     }

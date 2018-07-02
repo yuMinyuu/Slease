@@ -15,4 +15,10 @@
         android:actionViewClass=""
         android:actionLayout="@layout/activity_browse"
         app:showAsAction="never"/>
+
+    <item android:id="@+id/action_logOut"
+        android:title="Log Out"
+        android:actionViewClass=""
+        android:actionLayout="@layout/activity_browse"
+        app:showAsAction="never"/>
 </menu>
