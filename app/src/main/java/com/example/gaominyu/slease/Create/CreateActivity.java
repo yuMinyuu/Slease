@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
@@ -21,6 +22,8 @@ import android.widget.TextView;
 
 
 import com.example.gaominyu.slease.R;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -31,11 +34,31 @@ public class CreateActivity extends AppCompatActivity {
     private static final int TAKE_MORE_PHOTO_REQUEST = 1;  // The request code for callback
     private GridLayout gridLayout;
     private Button submit_button;
+    private DatabaseReference mFirebaseDatabase;
+    private Spinner frequencyDropDown;
+    private Spinner categoryDropDown;
+    private TextView inputItemName;
+    private TextView inputDescription;
+    private TextView inputDeposit;
+    private TextView inputRate;
+    private CheckBox checkCash;
+    private CheckBox checkTransfer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create);
+
+        // Declare layout elements and firebase item directory
+        mFirebaseDatabase = FirebaseDatabase.getInstance().getReference("items");
+        categoryDropDown = findViewById(R.id.spinnerCategory);
+        frequencyDropDown = findViewById(R.id.spinnerFrequency);
+        inputItemName = findViewById(R.id.txtVName);
+        inputDescription = findViewById(R.id.txtVDescription);
+        inputDeposit = findViewById(R.id.txtVDeposit);
+        inputRate = findViewById(R.id.txtVRatePerDay);
+        checkCash = findViewById(R.id.checkBox_Cash);
+        checkTransfer = findViewById(R.id.checkBox_Transfer);
 
         // Programmatically initialize the spinner for categories and frequency
         initFirstSpinner();
@@ -57,9 +80,7 @@ public class CreateActivity extends AppCompatActivity {
 
     private void initFirstSpinner() {
 
-        Spinner spinner = findViewById(R.id.spinnerCategory);
-
-        spinner.setPrompt("Select a category");
+        categoryDropDown.setPrompt("Select a category");
 
         // Spinner Drop down elements with some trumped-up examples of choices
         List<String> languages = new ArrayList<String>();
@@ -102,8 +123,8 @@ public class CreateActivity extends AppCompatActivity {
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         // attaching data adapter to spinner
-        spinner.setAdapter(dataAdapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        categoryDropDown.setAdapter(dataAdapter);
+        categoryDropDown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String item = parent.getItemAtPosition(position).toString();
@@ -118,8 +139,6 @@ public class CreateActivity extends AppCompatActivity {
     }
 
     private void initSecondSpinner() {
-
-        Spinner spinner = findViewById(R.id.spinnerFrequency);
 
         // Spinner Drop down elements with some trumped-up examples of choices
         List<String> languages = new ArrayList<>();
@@ -137,8 +156,8 @@ public class CreateActivity extends AppCompatActivity {
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         // attaching data adapter to spinner
-        spinner.setAdapter(dataAdapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        frequencyDropDown.setAdapter(dataAdapter);
+        frequencyDropDown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String item = parent.getItemAtPosition(position).toString();
