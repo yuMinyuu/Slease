@@ -133,4 +133,11 @@ public class BrowseActivity extends AppCompatActivity
     public void onFragmentInteraction(Uri uri){
         //you can leave it empty
     }
+
+    // Exit app directly even if there is activity stack behind this activity
+    @Override
+    public void onBackPressed()
+    {
+        this.finishAffinity();
+    }
 }
