@@ -1,5 +1,6 @@
 package com.example.gaominyu.slease.Login;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -9,9 +10,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.gaominyu.slease.Main.BrowseActivity;
 import com.example.gaominyu.slease.Model.User;
 import com.example.gaominyu.slease.R;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,6 +30,7 @@ public class SignupActivity extends AppCompatActivity {
     private Button btnSave;
     private DatabaseReference mFirebaseDatabase;
     private FirebaseDatabase mFirebaseInstance;
+    private FirebaseAuth mAuth;
 
     private String userId;
 
@@ -48,6 +53,35 @@ public class SignupActivity extends AppCompatActivity {
         // get reference to 'users' node
         mFirebaseDatabase = mFirebaseInstance.getReference("users");
 
+        // load current user's data from facebook
+        mAuth = FirebaseAuth.getInstance();
+        final FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+
+            // User is signed in.
+            userId = user.getUid();
+
+            // go to next activity if signed before
+            mFirebaseDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    if (snapshot.hasChild(userId)) {
+                        startActivity(new Intent(SignupActivity.this, BrowseActivity.class));
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError arg0) {
+                }
+            });
+
+            details.setText("Welcome! " + user.getDisplayName());
+            inputDisplayName.setText(user.getDisplayName());
+        } else {
+            // No user is signed in.
+            startActivity(new Intent(SignupActivity.this, LoginActivity.class));
+        }
+
         // Save / update the user
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,87 +89,21 @@ public class SignupActivity extends AppCompatActivity {
                 String displayName = inputDisplayName.getText().toString();
                 String description = inputDescription.getText().toString();
 
-                // Check for already existed userId
-                if (TextUtils.isEmpty(userId)) {
-                    createUser(displayName, description);
-                } else {
-                    updateUser(displayName, description);
-                }
+                createUser(displayName, description);
             }
         });
-
-        toggleButton();
-    }
-
-    // Changing button text
-    private void toggleButton() {
-        if (TextUtils.isEmpty(userId)) {
-            btnSave.setText("Save");
-        } else {
-            btnSave.setText("Update");
-        }
     }
 
     /**
      * Creating new user node under 'users'
      */
     private void createUser(String displayName, String description) {
-        // TODO
-        // In real apps this userId should be fetched
-        // by implementing firebase auth
-        if (TextUtils.isEmpty(userId)) {
-            userId = mFirebaseDatabase.push().getKey();
-        }
 
         User user = new User(displayName, description);
 
         mFirebaseDatabase.child(userId).setValue(user);
 
-        addUserChangeListener();
+        startActivity(new Intent(this, BrowseActivity.class));
     }
 
-    /**
-     * User data change listener
-     */
-    private void addUserChangeListener() {
-        // User data change listener
-        mFirebaseDatabase.child(userId).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
-
-                // Check for null
-                if (user == null) {
-                    Log.e(TAG, "User data is null!");
-                    return;
-                }
-
-                Log.e(TAG, "User data is changed!" + user.displayName + ", " + user.description);
-
-                // Display newly updated name and email
-                details.setText(user.displayName + ", " + user.description);
-
-                // clear edit text
-                inputDisplayName.setText("");
-                inputDescription.setText("");
-
-                toggleButton();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.e(TAG, "Failed to read user", error.toException());
-            }
-        });
-    }
-
-    private void updateUser(String displayName, String description) {
-        // updating the user via child nodes
-        if (!TextUtils.isEmpty(displayName))
-            mFirebaseDatabase.child(userId).child("displayName").setValue(displayName);
-
-        if (!TextUtils.isEmpty(description))
-            mFirebaseDatabase.child(userId).child("description").setValue(description);
-    }
 }

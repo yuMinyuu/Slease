@@ -45,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private CallbackManager mCallbackManager;
     private FirebaseAuth mAuth;
-    private Bundle userData;
+    //private Bundle userData;
 
     private static final String TAG;
 
@@ -66,14 +66,6 @@ public class LoginActivity extends AppCompatActivity {
 
         // Initialize Facebook Login button
         mCallbackManager = CallbackManager.Factory.create();
-
-        // Initialize Normal Login (fake)
-//        mLoginBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(LoginActivity.this, BrowseActivity.class));
-//            }
-//        });
 
         mFacebookLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
