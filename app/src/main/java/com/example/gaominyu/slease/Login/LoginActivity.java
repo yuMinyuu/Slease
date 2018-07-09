@@ -158,4 +158,10 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+    // Exit app directly  to prevent people press this to skip login
+    @Override
+    public void onBackPressed() {
+        this.finishAffinity();
+    }
+
 }
