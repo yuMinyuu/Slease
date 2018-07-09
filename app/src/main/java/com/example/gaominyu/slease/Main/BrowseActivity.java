@@ -75,11 +75,6 @@ public class BrowseActivity extends AppCompatActivity
         // load the BrowseFragment by default
         toolbar.setTitle("Browse");
         loadFragment(new BrowseFragment());
-
-        // Request permission to use camera if not allowed in system setting
-        ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.CAMERA},
-                1);
     }
 
     @Override
