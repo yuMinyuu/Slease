@@ -216,7 +216,7 @@ public class CreateActivity extends AppCompatActivity {
         }
 
         // Add a imageButton behind to allow more images to be added
-        imageButton.setBackgroundResource(R.drawable.plus);
+        imageButton.setBackgroundResource(R.drawable.plus24);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

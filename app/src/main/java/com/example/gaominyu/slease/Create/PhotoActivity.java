@@ -38,13 +38,13 @@ public class PhotoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_photo);
+
         // Request permission to use camera if not allowed in system setting
         ActivityCompat.requestPermissions(this,
                 new String[]{Manifest.permission.CAMERA},
                 1);
-
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_photo);
 
         // Check if this is call back activity by CreateActivity or new activity
         Bundle extras = getIntent().getExtras();
