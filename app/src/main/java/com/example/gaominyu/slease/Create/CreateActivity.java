@@ -19,9 +19,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
+import com.example.gaominyu.slease.Login.LoginActivity;
+import com.example.gaominyu.slease.Main.BrowseActivity;
+import com.example.gaominyu.slease.Model.Item;
 import com.example.gaominyu.slease.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -34,7 +40,6 @@ public class CreateActivity extends AppCompatActivity {
     private static final int TAKE_MORE_PHOTO_REQUEST = 1;  // The request code for callback
     private GridLayout gridLayout;
     private Button submit_button;
-    private DatabaseReference mFirebaseDatabase;
     private Spinner frequencyDropDown;
     private Spinner categoryDropDown;
     private TextView inputItemName;
@@ -43,6 +48,11 @@ public class CreateActivity extends AppCompatActivity {
     private TextView inputRate;
     private CheckBox checkCash;
     private CheckBox checkTransfer;
+    private DatabaseReference mFirebaseDatabase;
+    private FirebaseDatabase mFirebaseInstance;
+    private FirebaseAuth mAuth;
+    private FirebaseUser user;
+    private String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +60,6 @@ public class CreateActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create);
 
         // Declare layout elements and firebase item directory
-        mFirebaseDatabase = FirebaseDatabase.getInstance().getReference("items");
         categoryDropDown = findViewById(R.id.spinnerCategory);
         frequencyDropDown = findViewById(R.id.spinnerFrequency);
         inputItemName = findViewById(R.id.txtVName);
@@ -66,6 +75,16 @@ public class CreateActivity extends AppCompatActivity {
 
         // Get images from ImageHolder to set up image GridList
         initGridLayout(false);
+
+        // Set up connection point to Firebase
+        mFirebaseInstance = FirebaseDatabase.getInstance();
+
+        // get reference to 'items' node
+        mFirebaseDatabase = mFirebaseInstance.getReference("items");
+
+        // load current user's data
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
 
         // Submit all contents to RealTime Database
         initSubmitButton();
@@ -262,11 +281,41 @@ public class CreateActivity extends AppCompatActivity {
     protected  void initSubmitButton () {
 
         submit_button = findViewById(R.id.submit_button);
+        final String title = inputItemName.getText().toString().trim();
+        final String description = inputDescription.getText().toString().trim();
+        final int categoryID = categoryDropDown.getSelectedItemPosition();
+        final String imageUrls = "imageURL TO DO"; // TO DO
+        final String deposit = inputDeposit.getText().toString().trim();
+        final String rate = inputRate.getText().toString().trim();
+        final int frequencyID = frequencyDropDown.getSelectedItemPosition();
+        final boolean allowCash = checkCash.isChecked();
+        final boolean allowTransfer = checkTransfer.isChecked();
 
         submit_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+                if (user != null) {
+
+                    // User is signed in.
+                    userId = user.getUid();
+
+                    Item item = new Item(title, description, categoryID, imageUrls, deposit, rate,
+                            frequencyID, allowCash, allowTransfer);
+
+                    String key = mFirebaseDatabase.push().getKey();
+                    mFirebaseDatabase.child(key).setValue(item);
+
+                    Toast.makeText(getApplicationContext(), "Item Sleased.", Toast.LENGTH_LONG).show();
+
+
+                    startActivity(new Intent(CreateActivity.this, BrowseActivity.class));
+
+                } else {
+
+                    Toast.makeText(getApplicationContext(), "Fail to create lease because invalid user", Toast.LENGTH_LONG).show();
+
+                }
             }
         });
     }

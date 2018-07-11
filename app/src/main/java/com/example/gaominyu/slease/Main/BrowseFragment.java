@@ -192,11 +192,11 @@ public class BrowseFragment extends Fragment {
         @Override
         public void onBindViewHolder(MyViewHolder holder, final int position) {
             final Item item = itemList.get(position);
-            holder.name.setText(item.getTitle());
-            holder.price.setText(item.getPrice());
+            holder.name.setText(item.title);
+            holder.price.setText(item.rate);
 
             Glide.with(context)
-                    .load(item.getImage())
+                    .load(item.imageUrls)
                     .into(holder.thumbnail);
         }
 
