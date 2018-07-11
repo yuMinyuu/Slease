@@ -281,19 +281,20 @@ public class CreateActivity extends AppCompatActivity {
     protected  void initSubmitButton () {
 
         submit_button = findViewById(R.id.submit_button);
-        final String title = inputItemName.getText().toString().trim();
-        final String description = inputDescription.getText().toString().trim();
-        final int categoryID = categoryDropDown.getSelectedItemPosition();
-        final String imageUrls = "imageURL TO DO"; // TO DO
-        final String deposit = inputDeposit.getText().toString().trim();
-        final String rate = inputRate.getText().toString().trim();
-        final int frequencyID = frequencyDropDown.getSelectedItemPosition();
-        final boolean allowCash = checkCash.isChecked();
-        final boolean allowTransfer = checkTransfer.isChecked();
 
         submit_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                String title = inputItemName.getText().toString().trim();
+                String description = inputDescription.getText().toString().trim();
+                int categoryID = categoryDropDown.getSelectedItemPosition();
+                String imageUrls = "imageURL TO DO"; // TO DO
+                String deposit = inputDeposit.getText().toString().trim();
+                String rate = inputRate.getText().toString().trim();
+                int frequencyID = frequencyDropDown.getSelectedItemPosition();
+                boolean allowCash = checkCash.isChecked();
+                boolean allowTransfer = checkTransfer.isChecked();
 
                 if (user != null) {
 
@@ -303,11 +304,10 @@ public class CreateActivity extends AppCompatActivity {
                     Item item = new Item(title, description, categoryID, imageUrls, deposit, rate,
                             frequencyID, allowCash, allowTransfer);
 
-                    String key = mFirebaseDatabase.push().getKey();
-                    mFirebaseDatabase.child(key).setValue(item);
+                    String key = mFirebaseDatabase.child(userId).push().getKey();
+                    mFirebaseDatabase.child(userId).child(key).setValue(item);
 
-                    Toast.makeText(getApplicationContext(), "Item Sleased.", Toast.LENGTH_LONG).show();
-
+                    Toast.makeText(getApplicationContext(), "Your Item is on Slease!", Toast.LENGTH_LONG).show();
 
                     startActivity(new Intent(CreateActivity.this, BrowseActivity.class));
 
