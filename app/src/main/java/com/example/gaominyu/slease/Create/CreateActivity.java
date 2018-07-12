@@ -286,6 +286,7 @@ public class CreateActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                // Retrieve inputs
                 String title = inputItemName.getText().toString().trim();
                 String description = inputDescription.getText().toString().trim();
                 int categoryID = categoryDropDown.getSelectedItemPosition();
@@ -296,6 +297,15 @@ public class CreateActivity extends AppCompatActivity {
                 boolean allowCash = checkCash.isChecked();
                 boolean allowTransfer = checkTransfer.isChecked();
 
+                // Validate inputs
+                if (!isValidTitle(title)) {
+                    inputItemName.setError("Item title cannot be empty nor longer than 50 characters.");
+                    return;
+                }
+
+                // TO DO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+                // Upload inputs
                 if (user != null) {
 
                     // User is signed in.
@@ -320,33 +330,14 @@ public class CreateActivity extends AppCompatActivity {
         });
     }
 
-// Do not touch above !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // Validations
+    private boolean isValidTitle(String title) {
+        if (title != null && title.length() < 50) {
+            return true;
+        }
+        return false;
+    }
 
+    // TO DO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-//    public boolean onOptionsItemSelected(MenuItem item){
-//        switch((item.getItemId())){
-//            case R.id.addListing:
-//                addNewListing();
-//
-//                //backtoMainActivity();
-//                return true;
-//
-//        }
-//        return CreateActivity.super.onOptionsItemSelected(item);
-//    }
-//
-//    private void addNewListing(){
-//        String name = txtVName.getText().toString().trim();
-//        String description = txtVDescription.getText().toString().trim();
-//        String category = spinnerCategory.getText().toString().trim();
-//        String  deposit = txtVDeposit.getText().toString().trim();
-//        String ratePerDay = txtVRatePerDay.getText().toString().trim();
-//
-//        //write a listing to the database
-//        DatabaseReference mDatabase = FireBaseDatabase.getInstance().getReference("listings");
-//        Listing listingItem = new Listing();
-//        listingItem.setItemName(name);
-//
-//
-//    }
 }
