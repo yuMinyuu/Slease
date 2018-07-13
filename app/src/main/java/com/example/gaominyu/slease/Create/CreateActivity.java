@@ -303,7 +303,7 @@ public class CreateActivity extends AppCompatActivity {
                     return;
                 }
 
-                // TO DO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                // TO ADD MORE HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
                 // Upload inputs
                 if (user != null) {
@@ -323,7 +323,7 @@ public class CreateActivity extends AppCompatActivity {
 
                 } else {
 
-                    Toast.makeText(getApplicationContext(), "Fail to create lease because invalid user", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Fail to create lease because you have not signed in", Toast.LENGTH_LONG).show();
 
                 }
             }
@@ -338,6 +338,6 @@ public class CreateActivity extends AppCompatActivity {
         return false;
     }
 
-    // TO DO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // TO ADD MORE HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 }
