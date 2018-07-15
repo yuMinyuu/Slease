@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.example.gaominyu.slease.Login.LoginActivity;
 import com.example.gaominyu.slease.Main.BrowseActivity;
 import com.example.gaominyu.slease.Model.Item;
+import com.example.gaominyu.slease.Model.ItemPreview;
 import com.example.gaominyu.slease.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -383,9 +384,12 @@ public class CreateActivity extends AppCompatActivity {
                     Item item = new Item(title, description, categoryID, imageUrls, deposit, rate,
                             frequencyID, allowCash, allowTransfer);
 
+                    ItemPreview itemPreview = new ItemPreview(title, categoryID, imageUrls.get(0), rate,
+                            frequencyID);
+
                     String key = FirebaseDatabaseItemPreview.push().getKey();
                     FirebaseDatabaseItem.child(userId).child(key).setValue(item); // items with full info
-                    FirebaseDatabaseItemPreview.child(key).setValue(item);// items with simple info
+                    FirebaseDatabaseItemPreview.child(key).setValue(itemPreview);// items with simple info
 
                     Toast.makeText(getApplicationContext(), "Your Item is on Slease!", Toast.LENGTH_LONG).show();
 
