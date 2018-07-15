@@ -2,12 +2,14 @@ package com.example.gaominyu.slease.Model;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.util.List;
+
 @IgnoreExtraProperties
 public class Item {
     public String title;
     public String description;
     public int categoryID;
-    public String imageUrls;
+    public List<String> imageUrls;
     public String deposit;
     public String rate;
     public int frequencyID;
@@ -19,7 +21,7 @@ public class Item {
     public Item() {
     }
 
-    public Item(String title, String description, int categoryID, String imageUrls, String deposit,
+    public Item(String title, String description, int categoryID, List<String> imageUrls, String deposit,
                 String rate, int frquencyID, boolean allowCash, boolean allowTransfer){
         this.title = title;
         this.description = description;
@@ -32,27 +34,4 @@ public class Item {
         this.allowTransfer = allowTransfer;
     }
 
-//    public String getTitle() {
-//        return title;
-//    }
-//
-//    public void setTitle(String title) {
-//        this.title = title;
-//    }
-//
-//    public String getImage() {
-//        return imageUrl;
-//    }
-//
-//    public void setImage(String imageUrl) {
-//        this.imageUrl = imageUrl;
-//    }
-//
-//    public String getPrice() {
-//        return price;
-//    }
-//
-//    public void setPrice(String price) {
-//        this.price = price;
-//    }
 }

@@ -50,7 +50,8 @@ public class CreateActivity extends AppCompatActivity {
     private CheckBox checkCash;
     private CheckBox checkTransfer;
     private TextView errorTxtPaymentMethod;
-    private DatabaseReference mFirebaseDatabase;
+    private DatabaseReference FirebaseDatabaseItem;
+    private DatabaseReference FirebaseDatabaseItemPreview;
     private FirebaseDatabase mFirebaseInstance;
     private FirebaseAuth mAuth;
     private FirebaseUser user;
@@ -83,7 +84,8 @@ public class CreateActivity extends AppCompatActivity {
         mFirebaseInstance = FirebaseDatabase.getInstance();
 
         // get reference to 'items' node
-        mFirebaseDatabase = mFirebaseInstance.getReference("items");
+        FirebaseDatabaseItem = mFirebaseInstance.getReference("items");
+        FirebaseDatabaseItemPreview = mFirebaseInstance.getReference("items_preview");
 
         // load current user's data
         mAuth = FirebaseAuth.getInstance();
@@ -319,7 +321,9 @@ public class CreateActivity extends AppCompatActivity {
                 String description = inputDescription.getText().toString().trim();
                 int categoryID = categoryDropDown.getSelectedItemPosition();
                 TextView errorTxtCategory = (TextView) categoryDropDown.getSelectedView();
-                String imageUrls = "imageURL TO DO"; // TO DO
+                List<String> imageUrls = new ArrayList<>(2);
+                imageUrls.add("URL1");
+                imageUrls.add("URL2"); // TO DO
                 String deposit = inputDeposit.getText().toString().trim();
                 String rate = inputRate.getText().toString().trim();
                 int frequencyID = frequencyDropDown.getSelectedItemPosition();
@@ -379,8 +383,9 @@ public class CreateActivity extends AppCompatActivity {
                     Item item = new Item(title, description, categoryID, imageUrls, deposit, rate,
                             frequencyID, allowCash, allowTransfer);
 
-                    String key = mFirebaseDatabase.child(userId).push().getKey();
-                    mFirebaseDatabase.child(userId).child(key).setValue(item);
+                    String key = FirebaseDatabaseItemPreview.push().getKey();
+                    FirebaseDatabaseItem.child(userId).child(key).setValue(item); // items with full info
+                    FirebaseDatabaseItemPreview.child(key).setValue(item);// items with simple info
 
                     Toast.makeText(getApplicationContext(), "Your Item is on Slease!", Toast.LENGTH_LONG).show();
 
@@ -415,7 +420,5 @@ public class CreateActivity extends AppCompatActivity {
         }
         return false;
     }
-
-    // TO ADD MORE HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 }
