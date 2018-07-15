@@ -34,6 +34,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class CreateActivity extends AppCompatActivity {
 
@@ -48,6 +49,7 @@ public class CreateActivity extends AppCompatActivity {
     private TextView inputRate;
     private CheckBox checkCash;
     private CheckBox checkTransfer;
+    private TextView errorTxtPaymentMethod;
     private DatabaseReference mFirebaseDatabase;
     private FirebaseDatabase mFirebaseInstance;
     private FirebaseAuth mAuth;
@@ -68,6 +70,7 @@ public class CreateActivity extends AppCompatActivity {
         inputRate = findViewById(R.id.txtVRatePerDay);
         checkCash = findViewById(R.id.checkBox_Cash);
         checkTransfer = findViewById(R.id.checkBox_Transfer);
+        errorTxtPaymentMethod = findViewById(R.id.checkBox_ErrorDisplay);
 
         // Programmatically initialize the spinner for categories and frequency
         initFirstSpinner();
@@ -161,6 +164,7 @@ public class CreateActivity extends AppCompatActivity {
 
         // Spinner Drop down elements with some trumped-up examples of choices
         List<String> languages = new ArrayList<>();
+        languages.add("Select One");
         languages.add("Day");
         languages.add("Week");
         languages.add("Month");
@@ -169,7 +173,31 @@ public class CreateActivity extends AppCompatActivity {
         languages.add("Year");
 
         // Creating adapter for spinner and disable the first item in the list from selection
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, languages);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, languages){
+            @Override
+            public boolean isEnabled(int position) {
+                if (position == 0) {
+                    // Disable the second item from Spinner
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if (position == 0) {
+                    // Set the disable item text color
+                    tv.setTextColor(Color.GRAY);
+                } else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+        };
 
         // Drop down layout style - list view with radio button
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -290,20 +318,57 @@ public class CreateActivity extends AppCompatActivity {
                 String title = inputItemName.getText().toString().trim();
                 String description = inputDescription.getText().toString().trim();
                 int categoryID = categoryDropDown.getSelectedItemPosition();
+                TextView errorTxtCategory = (TextView) categoryDropDown.getSelectedView();
                 String imageUrls = "imageURL TO DO"; // TO DO
                 String deposit = inputDeposit.getText().toString().trim();
                 String rate = inputRate.getText().toString().trim();
                 int frequencyID = frequencyDropDown.getSelectedItemPosition();
+                TextView errorTxtFrequency = (TextView) frequencyDropDown.getSelectedView();
                 boolean allowCash = checkCash.isChecked();
                 boolean allowTransfer = checkTransfer.isChecked();
 
                 // Validate inputs
-                if (!isValidTitle(title)) {
+                if (!isValidText(title, 50)) {
                     inputItemName.setError("Item title cannot be empty nor longer than 50 characters.");
                     return;
                 }
 
-                // TO ADD MORE HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                if(!isValidText(description, 500)){
+                    inputDescription.setError("Description cannot be empty nor longer than 500 characters.");
+                    return;
+                }
+
+                if(categoryDropDown.getSelectedItemPosition() == 0){
+                    errorTxtCategory.setError("");
+                    return;
+                } else {
+                    errorTxtCategory.setError(null);
+                }
+
+                if(!isValidDigit(deposit)){
+                    inputDeposit.setError("Deposit cannot be empty and must be numeric.");
+                    return;
+                }
+
+                if(!isValidDigit(rate)){
+                    inputRate.setError("Rate cannot be empty and must be numeric.");
+                    return;
+                }
+
+                if(frequencyDropDown.getSelectedItemPosition() == 0){
+                    errorTxtFrequency.setError("");
+                    return;
+                } else {
+                    errorTxtFrequency.setError(null);
+                }
+
+                if(!allowCash && !allowTransfer){
+                    errorTxtPaymentMethod.setError("Please select at least one payment method.");
+                    //errorTxtPaymentMethod.requestFocus();
+                    return;
+                } else {
+                    errorTxtPaymentMethod.setError(null);
+                }
 
                 // Upload inputs
                 if (user != null) {
@@ -331,9 +396,22 @@ public class CreateActivity extends AppCompatActivity {
     }
 
     // Validations
-    private boolean isValidTitle(String title) {
-        if (title != null && title.length() < 50) {
+    private boolean isValidText(String title, int maxLength) {
+        if (title.length() != 0 && title.length() < maxLength) {
             return true;
+        }
+        return false;
+    }
+
+    private boolean isValidDigit(String value){
+        if(value.length() != 0 )
+        {
+            Pattern pInt = Pattern.compile("^[-\\+]?[\\d]*$");
+            Pattern pDouble = Pattern.compile("^[-\\+]?[.\\d]*$");
+            if( pInt.matcher(value).matches() || pDouble.matcher(value).matches())
+            {
+                return true;
+            }
         }
         return false;
     }
