@@ -29,12 +29,16 @@ import com.example.gaominyu.slease.Model.ItemPreview;
 import com.example.gaominyu.slease.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 public class CreateActivity extends AppCompatActivity {
@@ -53,6 +57,8 @@ public class CreateActivity extends AppCompatActivity {
     private TextView errorTxtPaymentMethod;
     private DatabaseReference FirebaseDatabaseItem;
     private DatabaseReference FirebaseDatabaseItemPreview;
+    private DatabaseReference FirebaseDatabaseCategories;
+    private DatabaseReference FirebaseDatabaseFrequencies;
     private FirebaseDatabase mFirebaseInstance;
     private FirebaseAuth mAuth;
     private FirebaseUser user;
@@ -74,10 +80,6 @@ public class CreateActivity extends AppCompatActivity {
         checkTransfer = findViewById(R.id.checkBox_Transfer);
         errorTxtPaymentMethod = findViewById(R.id.checkBox_ErrorDisplay);
 
-        // Programmatically initialize the spinner for categories and frequency
-        initFirstSpinner();
-        initSecondSpinner();
-
         // Get images from ImageHolder to set up image GridList
         initGridLayout(false);
 
@@ -87,10 +89,16 @@ public class CreateActivity extends AppCompatActivity {
         // get reference to 'items' node
         FirebaseDatabaseItem = mFirebaseInstance.getReference("items");
         FirebaseDatabaseItemPreview = mFirebaseInstance.getReference("items_preview");
+        FirebaseDatabaseCategories = mFirebaseInstance.getReference("categories");
+        FirebaseDatabaseFrequencies = mFirebaseInstance.getReference("frequencies");
 
         // load current user's data
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
+
+        // Programmatically initialize the spinner for categories and frequency
+        initFirstSpinner();
+        initSecondSpinner();
 
         // Submit all contents to RealTime Database
         initSubmitButton();
@@ -105,20 +113,28 @@ public class CreateActivity extends AppCompatActivity {
 
     private void initFirstSpinner() {
 
-        categoryDropDown.setPrompt("Select a category");
+        //categoryDropDown.setPrompt("Select a category");
 
         // Spinner Drop down elements with some trumped-up examples of choices
-        List<String> languages = new ArrayList<String>();
-        languages.add("Select One");
-        languages.add("Drone");
-        languages.add("Camera");
-        languages.add("Costume");
-        languages.add("Auto Mobile");
-        languages.add("Bicycle");
-        languages.add("Motorcycle");
+        final List<String> categoryList = new ArrayList<>();
+        categoryList.add("Select One");
+        FirebaseDatabaseCategories.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot child : dataSnapshot.getChildren()) {
+                            categoryList.add(child.getValue().toString());
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        //handle databaseError
+                    }
+                });
 
         // Creating adapter for spinner and disable the first item in the list from selection
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, languages) {
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categoryList) {
             @Override
             public boolean isEnabled(int position) {
                 if (position == 0) {
@@ -166,17 +182,25 @@ public class CreateActivity extends AppCompatActivity {
     private void initSecondSpinner() {
 
         // Spinner Drop down elements with some trumped-up examples of choices
-        List<String> languages = new ArrayList<>();
-        languages.add("Select One");
-        languages.add("Day");
-        languages.add("Week");
-        languages.add("Month");
-        languages.add("Quarter");
-        languages.add("Half Year");
-        languages.add("Year");
+        final List<String> frequencyList = new ArrayList<>();
+        frequencyList.add("Select One");
+        FirebaseDatabaseFrequencies.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot child : dataSnapshot.getChildren()) {
+                            frequencyList.add(child.getValue().toString());
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        //handle databaseError
+                    }
+                });
 
         // Creating adapter for spinner and disable the first item in the list from selection
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, languages){
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, frequencyList){
             @Override
             public boolean isEnabled(int position) {
                 if (position == 0) {
