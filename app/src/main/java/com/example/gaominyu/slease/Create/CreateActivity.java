@@ -1,9 +1,11 @@
 package com.example.gaominyu.slease.Create;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -27,6 +29,8 @@ import com.example.gaominyu.slease.Main.BrowseActivity;
 import com.example.gaominyu.slease.Model.Item;
 import com.example.gaominyu.slease.Model.ItemPreview;
 import com.example.gaominyu.slease.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -34,11 +38,18 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 public class CreateActivity extends AppCompatActivity {
@@ -55,6 +66,9 @@ public class CreateActivity extends AppCompatActivity {
     private CheckBox checkCash;
     private CheckBox checkTransfer;
     private TextView errorTxtPaymentMethod;
+
+    private String userId;
+
     private DatabaseReference FirebaseDatabaseItem;
     private DatabaseReference FirebaseDatabaseItemPreview;
     private DatabaseReference FirebaseDatabaseCategories;
@@ -62,7 +76,8 @@ public class CreateActivity extends AppCompatActivity {
     private FirebaseDatabase mFirebaseInstance;
     private FirebaseAuth mAuth;
     private FirebaseUser user;
-    private String userId;
+    private FirebaseStorage storage;
+    private StorageReference storageReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +110,10 @@ public class CreateActivity extends AppCompatActivity {
         // load current user's data
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
+
+        // Set up connection point to storage
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
 
         // Programmatically initialize the spinner for categories and frequency
         initFirstSpinner();
@@ -393,7 +412,6 @@ public class CreateActivity extends AppCompatActivity {
 
                 if(!allowCash && !allowTransfer){
                     errorTxtPaymentMethod.setError("Please select at least one payment method.");
-                    //errorTxtPaymentMethod.requestFocus();
                     return;
                 } else {
                     errorTxtPaymentMethod.setError(null);
@@ -414,6 +432,8 @@ public class CreateActivity extends AppCompatActivity {
                     String key = FirebaseDatabaseItemPreview.push().getKey();
                     FirebaseDatabaseItem.child(userId).child(key).setValue(item); // items with full info
                     FirebaseDatabaseItemPreview.child(key).setValue(itemPreview);// items with simple info
+
+                    uploadImages(userId, key);
 
                     Toast.makeText(getApplicationContext(), "Your Item is on Slease!", Toast.LENGTH_LONG).show();
 
@@ -447,6 +467,51 @@ public class CreateActivity extends AppCompatActivity {
             }
         }
         return false;
+    }
+
+    private void uploadImages(String userId, String key) {
+
+        FrameLayout frameLayout = (FrameLayout)gridLayout.getChildAt(0);
+        ImageView imageView = (ImageView)frameLayout.getChildAt(0);
+        Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
+
+        if(bitmap != null)
+        {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            byte[] bitmapdata = stream.toByteArray();
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(bitmapdata);
+
+//            final ProgressDialog progressDialog = new ProgressDialog(this);
+//            progressDialog.setTitle("Uploading...");
+//            progressDialog.show();
+
+            StorageReference ref = storageReference.child(
+                    "itemImages/" + userId + "/" + key + "/" + UUID.randomUUID().toString());
+            ref.putStream(inputStream)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                            progressDialog.dismiss();
+                            Toast.makeText(CreateActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+//                            progressDialog.dismiss();
+                            Toast.makeText(CreateActivity.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+//                            double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
+//                                    .getTotalByteCount());
+//                            progressDialog.setMessage("Uploaded "+(int)progress+"%");
+                        }
+                    });
+        }
     }
 
 }
