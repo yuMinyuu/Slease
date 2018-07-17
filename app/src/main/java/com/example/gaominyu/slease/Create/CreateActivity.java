@@ -8,6 +8,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -423,8 +424,10 @@ public class CreateActivity extends AppCompatActivity {
                     Item item = new Item(title, description, categoryID, deposit, rate,
                             frequencyID, allowCash, allowTransfer);
 
+                    String mainImageBase64 = getBase64FromImageView();
+
                     ItemPreview itemPreview = new ItemPreview(title, categoryID, rate,
-                            frequencyID);
+                            frequencyID, mainImageBase64);
 
                     String key = FirebaseDatabaseItemPreview.push().getKey();
                     FirebaseDatabaseItem.child(userId).child(key).setValue(item); // items with full info
@@ -503,6 +506,18 @@ public class CreateActivity extends AppCompatActivity {
                         });
             }
         }
+    }
+
+    private String getBase64FromImageView(){
+
+        FrameLayout frameLayout = (FrameLayout)gridLayout.getChildAt(0);
+        ImageView imageView = (ImageView) frameLayout.getChildAt(0);
+        Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream .toByteArray();
+        return Base64.encodeToString(byteArray, Base64.DEFAULT);
+
     }
 
 }

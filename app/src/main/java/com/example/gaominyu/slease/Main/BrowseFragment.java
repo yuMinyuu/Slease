@@ -2,6 +2,8 @@ package com.example.gaominyu.slease.Main;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -23,6 +26,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.bumptech.glide.Glide;
 import com.example.gaominyu.slease.Model.Item;
+import com.example.gaominyu.slease.Model.ItemPreview;
 import com.example.gaominyu.slease.R;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -38,7 +42,7 @@ public class BrowseFragment extends Fragment {
     private static final String URL = "https://api.androidhive.info/json/movies_2017.json";
 
     private RecyclerView recyclerView;
-    private List<Item> itemList;
+    private List<ItemPreview> itemPreviewList;
     private StoreAdapter mAdapter;
 
     public BrowseFragment() {
@@ -64,8 +68,8 @@ public class BrowseFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_browse, container, false);
 
         recyclerView = view.findViewById(R.id.recycler_view);
-        itemList = new ArrayList<>();
-        mAdapter = new StoreAdapter(getActivity(), itemList);
+        itemPreviewList = new ArrayList<>();
+        mAdapter = new StoreAdapter(getActivity(), itemPreviewList);
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 3);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -95,11 +99,11 @@ public class BrowseFragment extends Fragment {
                             return;
                         }
 
-                        List<Item> items = new Gson().fromJson(response.toString(), new TypeToken<List<Item>>() {
+                        List<ItemPreview> itemPreviews = new Gson().fromJson(response.toString(), new TypeToken<List<ItemPreview>>() {
                         }.getType());
 
-                        itemList.clear();
-                        itemList.addAll(items);
+                        itemPreviewList.clear();
+                        itemPreviewList.addAll(itemPreviews);
 
                         // refreshing recycler view
                         mAdapter.notifyDataSetChanged();
@@ -161,7 +165,7 @@ public class BrowseFragment extends Fragment {
 
     class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.MyViewHolder> {
         private Context context;
-        private List<Item> itemList;
+        private List<ItemPreview> itemPreviewList;
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView name, price;
@@ -176,9 +180,9 @@ public class BrowseFragment extends Fragment {
         }
 
 
-        public StoreAdapter(Context context, List<Item> movieList) {
+        public StoreAdapter(Context context, List<ItemPreview> movieList) {
             this.context = context;
-            this.itemList = movieList;
+            this.itemPreviewList = movieList;
         }
 
         @Override
@@ -191,18 +195,20 @@ public class BrowseFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(MyViewHolder holder, final int position) {
-            final Item item = itemList.get(position);
-            holder.name.setText(item.title);
-            holder.price.setText(item.rate);
+            final ItemPreview itemPreview = itemPreviewList.get(position);
+            holder.name.setText(itemPreview.title);
+            holder.price.setText(itemPreview.rate);
 
-            Glide.with(context)
-                    .load(item.imageUrls)
-                    .into(holder.thumbnail);
+//            byte[] decodedString = Base64.decode(itemPreview.imageBase64, Base64.DEFAULT);
+//            Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+//            Glide.with(context)
+//                    .load(bitmap)
+//                    .into(holder.thumbnail);
         }
 
         @Override
         public int getItemCount() {
-            return itemList.size();
+            return itemPreviewList.size();
         }
     }
 
