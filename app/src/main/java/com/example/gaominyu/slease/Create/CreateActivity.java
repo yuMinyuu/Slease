@@ -471,46 +471,40 @@ public class CreateActivity extends AppCompatActivity {
 
     private void uploadImages(String userId, String key) {
 
-        FrameLayout frameLayout = (FrameLayout)gridLayout.getChildAt(0);
-        ImageView imageView = (ImageView)frameLayout.getChildAt(0);
-        Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
+        for(int i = 0; i < gridLayout.getChildCount() - 1; i++) {
 
-        if(bitmap != null)
-        {
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-            byte[] bitmapdata = stream.toByteArray();
-            ByteArrayInputStream inputStream = new ByteArrayInputStream(bitmapdata);
+            FrameLayout frameLayout = (FrameLayout) gridLayout.getChildAt(i);
+            ImageView imageView = (ImageView) frameLayout.getChildAt(0);
+            Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
 
-//            final ProgressDialog progressDialog = new ProgressDialog(this);
-//            progressDialog.setTitle("Uploading...");
-//            progressDialog.show();
+            if (bitmap != null) {
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                byte[] bitmapdata = stream.toByteArray();
+                ByteArrayInputStream inputStream = new ByteArrayInputStream(bitmapdata);
 
-            StorageReference ref = storageReference.child(
-                    "itemImages/" + userId + "/" + key + "/" + UUID.randomUUID().toString());
-            ref.putStream(inputStream)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                            progressDialog.dismiss();
-                            Toast.makeText(CreateActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-//                            progressDialog.dismiss();
-                            Toast.makeText(CreateActivity.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-//                            double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
-//                                    .getTotalByteCount());
-//                            progressDialog.setMessage("Uploaded "+(int)progress+"%");
-                        }
-                    });
+                StorageReference ref = storageReference.child(
+                        "itemImages/" + userId + "/" + key + "/" + UUID.randomUUID().toString());
+                ref.putStream(inputStream)
+                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                Toast.makeText(CreateActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(CreateActivity.this, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+
+                            }
+                        });
+            }
         }
     }
 
