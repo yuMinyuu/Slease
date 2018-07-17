@@ -67,6 +67,7 @@ public class CreateActivity extends AppCompatActivity {
     private CheckBox checkCash;
     private CheckBox checkTransfer;
     private TextView errorTxtPaymentMethod;
+    private TextView errorImageList;
 
     private String userId;
 
@@ -95,6 +96,7 @@ public class CreateActivity extends AppCompatActivity {
         checkCash = findViewById(R.id.checkBox_Cash);
         checkTransfer = findViewById(R.id.checkBox_Transfer);
         errorTxtPaymentMethod = findViewById(R.id.checkBox_ErrorDisplay);
+        errorImageList = findViewById(R.id.imageList_ErrorDisplay);
 
         // Get images from ImageHolder to set up image GridList
         initGridLayout(false);
@@ -391,6 +393,13 @@ public class CreateActivity extends AppCompatActivity {
                     errorTxtCategory.setError(null);
                 }
 
+                if(!isValidImageList()){
+                    errorImageList.setError("You need at least one image.");
+                    return;
+                } else {
+                    errorImageList.setError(null);
+                }
+
                 if(!isValidDigit(deposit)){
                     inputDeposit.setError("Deposit cannot be empty and must be numeric.");
                     return;
@@ -465,6 +474,14 @@ public class CreateActivity extends AppCompatActivity {
             {
                 return true;
             }
+        }
+        return false;
+    }
+
+    private boolean isValidImageList() {
+        if(gridLayout.getChildCount() > 1 )
+        {
+            return true;
         }
         return false;
     }
