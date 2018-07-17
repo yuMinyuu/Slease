@@ -69,7 +69,7 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 style="@android:style/Widget.EditText"/>
-            
+
             <GridLayout
                 android:id="@+id/create_images"
                 android:layout_width="match_parent"

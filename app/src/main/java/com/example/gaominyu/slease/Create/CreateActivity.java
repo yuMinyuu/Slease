@@ -1,6 +1,5 @@
 package com.example.gaominyu.slease.Create;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -25,7 +24,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.example.gaominyu.slease.Login.LoginActivity;
 import com.example.gaominyu.slease.Main.BrowseActivity;
 import com.example.gaominyu.slease.Model.Item;
 import com.example.gaominyu.slease.Model.ItemPreview;
@@ -49,7 +47,6 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
