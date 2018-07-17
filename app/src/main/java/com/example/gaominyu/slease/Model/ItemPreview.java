@@ -9,7 +9,6 @@ public class ItemPreview {
 
     public String title;
     public int categoryID;
-    public String mainImageUrl;
     public String rate;
     public int frequencyID;
 
@@ -18,12 +17,11 @@ public class ItemPreview {
     public ItemPreview() {
     }
 
-    public ItemPreview(String title,int categoryID, String mainImageUrl, String rate, int frquencyID){
+    public ItemPreview(String title, int categoryID, String rate, int frequencyID){
         this.title = title;
         this.categoryID = categoryID;
-        this.mainImageUrl = mainImageUrl;
         this.rate = rate;
-        this.frequencyID = frquencyID;
+        this.frequencyID = frequencyID;
     }
 
 }

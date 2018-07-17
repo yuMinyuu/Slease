@@ -9,7 +9,6 @@ public class Item {
     public String title;
     public String description;
     public int categoryID;
-    public List<String> imageUrls;
     public String deposit;
     public String rate;
     public int frequencyID;
@@ -21,12 +20,11 @@ public class Item {
     public Item() {
     }
 
-    public Item(String title, String description, int categoryID, List<String> imageUrls, String deposit,
+    public Item(String title, String description, int categoryID, String deposit,
                 String rate, int frquencyID, boolean allowCash, boolean allowTransfer){
         this.title = title;
         this.description = description;
         this.categoryID = categoryID;
-        this.imageUrls = imageUrls;
         this.deposit = deposit;
         this.rate = rate;
         this.frequencyID = frquencyID;

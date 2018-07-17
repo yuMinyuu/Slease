@@ -365,9 +365,6 @@ public class CreateActivity extends AppCompatActivity {
                 String description = inputDescription.getText().toString().trim();
                 int categoryID = categoryDropDown.getSelectedItemPosition();
                 TextView errorTxtCategory = (TextView) categoryDropDown.getSelectedView();
-                List<String> imageUrls = new ArrayList<>(2);
-                imageUrls.add("URL1");
-                imageUrls.add("URL2"); // TO DO
                 String deposit = inputDeposit.getText().toString().trim();
                 String rate = inputRate.getText().toString().trim();
                 int frequencyID = frequencyDropDown.getSelectedItemPosition();
@@ -423,10 +420,10 @@ public class CreateActivity extends AppCompatActivity {
                     // User is signed in.
                     userId = user.getUid();
 
-                    Item item = new Item(title, description, categoryID, imageUrls, deposit, rate,
+                    Item item = new Item(title, description, categoryID, deposit, rate,
                             frequencyID, allowCash, allowTransfer);
 
-                    ItemPreview itemPreview = new ItemPreview(title, categoryID, imageUrls.get(0), rate,
+                    ItemPreview itemPreview = new ItemPreview(title, categoryID, rate,
                             frequencyID);
 
                     String key = FirebaseDatabaseItemPreview.push().getKey();
