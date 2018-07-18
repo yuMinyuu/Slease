@@ -28,6 +28,11 @@ import com.bumptech.glide.Glide;
 import com.example.gaominyu.slease.Model.Item;
 import com.example.gaominyu.slease.Model.ItemPreview;
 import com.example.gaominyu.slease.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -38,12 +43,13 @@ import java.util.List;
 
 public class BrowseFragment extends Fragment {
 
-    private static final String TAG = BrowseFragment.class.getSimpleName();
-    private static final String URL = "https://api.androidhive.info/json/movies_2017.json";
+    //private static final String TAG = BrowseFragment.class.getSimpleName();
+    //private static final String URL = "https://api.androidhive.info/json/movies_2017.json";
 
     private RecyclerView recyclerView;
     private List<ItemPreview> itemPreviewList;
     private StoreAdapter mAdapter;
+    private DatabaseReference FirebaseDatabaseItemPreview;
 
     public BrowseFragment() {
         // Required empty public constructor
@@ -84,40 +90,59 @@ public class BrowseFragment extends Fragment {
 //        recyclerView.setDrawingCacheEnabled(true);
 //        recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
 
-        fetchLeasedItems();
+        fetchLeasedItemsToLocal();
 
         return view;
     }
 
-    private void fetchLeasedItems() {
-        JsonArrayRequest request = new JsonArrayRequest(URL,
-                new Response.Listener<JSONArray>() {
+    private void fetchLeasedItemsToLocal() {
+//        JsonArrayRequest request = new JsonArrayRequest(URL,
+//                new Response.Listener<JSONArray>() {
+//                    @Override
+//                    public void onResponse(JSONArray response) {
+//                        if (response == null) {
+//                            Toast.makeText(getActivity(), "Couldn't fetch the leased items! Pleas try again.", Toast.LENGTH_LONG).show();
+//                            return;
+//                        }
+//
+//                        List<ItemPreview> itemPreviews = new Gson().fromJson(response.toString(), new TypeToken<List<ItemPreview>>() {
+//                        }.getType());
+//
+//                        itemPreviewList.clear();
+//                        itemPreviewList.addAll(itemPreviews);
+//
+//                        // refreshing recycler view
+//                        mAdapter.notifyDataSetChanged();
+//                    }
+//                }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                // error in getting json
+//                Log.e(TAG, "Error: " + error.getMessage());
+//                Toast.makeText(getActivity(), "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+//            }
+//        });
+
+//        VolleySingleton.getInstance().addToRequestQueue(request);
+
+        FirebaseDatabaseItemPreview = FirebaseDatabase.getInstance().getReference("items_preview");
+        FirebaseDatabaseItemPreview.addListenerForSingleValueEvent(
+                new ValueEventListener() {
                     @Override
-                    public void onResponse(JSONArray response) {
-                        if (response == null) {
-                            Toast.makeText(getActivity(), "Couldn't fetch the leased items! Pleas try again.", Toast.LENGTH_LONG).show();
-                            return;
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot previewData : dataSnapshot.getChildren()) {
+                            itemPreviewList.add(previewData.getValue(ItemPreview.class));
                         }
-
-                        List<ItemPreview> itemPreviews = new Gson().fromJson(response.toString(), new TypeToken<List<ItemPreview>>() {
-                        }.getType());
-
-                        itemPreviewList.clear();
-                        itemPreviewList.addAll(itemPreviews);
-
                         // refreshing recycler view
                         mAdapter.notifyDataSetChanged();
+                        Toast.makeText(getContext(), "Fetch Items done", Toast.LENGTH_SHORT).show();
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                // error in getting json
-                Log.e(TAG, "Error: " + error.getMessage());
-                Toast.makeText(getActivity(), "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
 
-        VolleySingleton.getInstance().addToRequestQueue(request);
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        //handle databaseError
+                    }
+                });
     }
 
     public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
@@ -199,11 +224,11 @@ public class BrowseFragment extends Fragment {
             holder.name.setText(itemPreview.title);
             holder.price.setText(itemPreview.rate);
 
-//            byte[] decodedString = Base64.decode(itemPreview.imageBase64, Base64.DEFAULT);
-//            Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-//            Glide.with(context)
-//                    .load(bitmap)
-//                    .into(holder.thumbnail);
+            byte[] decodedString = Base64.decode(itemPreview.imageBase64, Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            Glide.with(context)
+                    .load(bitmap)
+                    .into(holder.thumbnail);
         }
 
         @Override

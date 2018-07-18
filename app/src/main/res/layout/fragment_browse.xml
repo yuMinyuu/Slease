@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:paddingStart="10dp"
             android:paddingTop="10dp"
-            android:text="Available Items"
+            android:text="Popular Items"
             android:textColor="#111"
             android:textSize="16sp" />
 
