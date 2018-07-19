@@ -527,6 +527,9 @@ public class CreateActivity extends AppCompatActivity {
         FrameLayout frameLayout = (FrameLayout)gridLayout.getChildAt(0);
         ImageView imageView = (ImageView) frameLayout.getChildAt(0);
         Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+
+        // TO DO: downsize bitmap image here to thumbnail size
+
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
         byte[] byteArray = byteArrayOutputStream .toByteArray();
