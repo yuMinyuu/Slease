@@ -432,7 +432,7 @@ public class CreateActivity extends AppCompatActivity {
 
                     String mainImageBase64 = getBase64FromImageView();
 
-                    ItemPreview itemPreview = new ItemPreview(title, categoryID, rate,
+                    ItemPreview itemPreview = new ItemPreview(title, categoryID, rate, deposit,
                             frequencyID, mainImageBase64);
 
                     String key = FirebaseDatabaseItemPreview.push().getKey();

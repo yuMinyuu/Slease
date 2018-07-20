@@ -10,6 +10,7 @@ public class ItemPreview {
     public String title;
     public int categoryID;
     public String rate;
+    public String deposit;
     public int frequencyID;
     public String imageBase64;
 
@@ -18,10 +19,11 @@ public class ItemPreview {
     public ItemPreview() {
     }
 
-    public ItemPreview(String title, int categoryID, String rate, int frequencyID, String imageBase64){
+    public ItemPreview(String title, int categoryID, String rate, String deposit, int frequencyID, String imageBase64){
         this.title = title;
         this.categoryID = categoryID;
         this.rate = rate;
+        this.deposit = deposit;
         this.frequencyID = frequencyID;
         this.imageBase64 = imageBase64;
     }

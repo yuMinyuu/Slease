@@ -1,31 +1,18 @@
 package com.example.gaominyu.slease.Main;
 
-import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Base64;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.bumptech.glide.Glide;
-import com.example.gaominyu.slease.Model.Item;
 import com.example.gaominyu.slease.Model.ItemPreview;
 import com.example.gaominyu.slease.R;
 import com.google.firebase.database.DataSnapshot;
@@ -33,10 +20,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +31,7 @@ public class BrowseFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private List<ItemPreview> itemPreviewList;
-    private StoreAdapter mAdapter;
+    private ItemAdapter mAdapter;
     private DatabaseReference FirebaseDatabaseItemPreview;
 
     public BrowseFragment() {
@@ -75,7 +58,7 @@ public class BrowseFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.recycler_view);
         itemPreviewList = new ArrayList<>();
-        mAdapter = new StoreAdapter(getActivity(), itemPreviewList);
+        mAdapter = new ItemAdapter(getActivity(), itemPreviewList);
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 3);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -145,96 +128,12 @@ public class BrowseFragment extends Fragment {
                 });
     }
 
-    public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
-
-        private int spanCount;
-        private int spacing;
-        private boolean includeEdge;
-
-        public GridSpacingItemDecoration(int spanCount, int spacing, boolean includeEdge) {
-            this.spanCount = spanCount;
-            this.spacing = spacing;
-            this.includeEdge = includeEdge;
-        }
-
-        @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            int position = parent.getChildAdapterPosition(view); // item position
-            int column = position % spanCount; // item column
-
-            if (includeEdge) {
-                outRect.left = spacing - column * spacing / spanCount; // spacing - column * ((1f / spanCount) * spacing)
-                outRect.right = (column + 1) * spacing / spanCount; // (column + 1) * ((1f / spanCount) * spacing)
-
-                if (position < spanCount) { // top edge
-                    outRect.top = spacing;
-                }
-                outRect.bottom = spacing; // item bottom
-            } else {
-                outRect.left = column * spacing / spanCount; // column * ((1f / spanCount) * spacing)
-                outRect.right = spacing - (column + 1) * spacing / spanCount; // spacing - (column + 1) * ((1f /    spanCount) * spacing)
-                if (position >= spanCount) {
-                    outRect.top = spacing; // item top
-                }
-            }
-        }
-    }
-
     /**
      * Converting dp to pixel
      */
     private int dpToPx(int dp) {
         Resources r = getResources();
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
-    }
-
-    class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.MyViewHolder> {
-        private Context context;
-        private List<ItemPreview> itemPreviewList;
-
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-            public TextView name, price;
-            public ImageView thumbnail;
-
-            public MyViewHolder(View view) {
-                super(view);
-                name = view.findViewById(R.id.title);
-                price = view.findViewById(R.id.price);
-                thumbnail = view.findViewById(R.id.thumbnail);
-            }
-        }
-
-
-        public StoreAdapter(Context context, List<ItemPreview> movieList) {
-            this.context = context;
-            this.itemPreviewList = movieList;
-        }
-
-        @Override
-        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.browse_item_row, parent, false);
-
-            return new MyViewHolder(itemView);
-        }
-
-        @Override
-        public void onBindViewHolder(MyViewHolder holder, final int position) {
-            final ItemPreview itemPreview = itemPreviewList.get(position);
-            holder.name.setText(itemPreview.title);
-            holder.price.setText(itemPreview.rate);
-
-            byte[] decodedString = Base64.decode(itemPreview.imageBase64, Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            Glide.with(context)
-                    .load(bitmap)
-                    .into(holder.thumbnail);
-        }
-
-        @Override
-        public int getItemCount() {
-            return itemPreviewList.size();
-        }
     }
 
     public interface OnFragmentInteractionListener {
