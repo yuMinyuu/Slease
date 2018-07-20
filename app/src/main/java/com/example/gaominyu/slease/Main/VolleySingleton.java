@@ -7,6 +7,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
+// Not used anymore
 public class VolleySingleton extends Application {
 
     public static final String TAG = VolleySingleton.class.getSimpleName();

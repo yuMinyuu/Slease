@@ -81,7 +81,6 @@ public class ProfileFragment extends Fragment {
         if(user != null) {
 
             userId = user.getUid();
-
             itemIDs = new ArrayList<>();
             FirebaseDatabaseItem = FirebaseDatabase.getInstance().getReference("items").child(userId);
             FirebaseDatabaseItem.addListenerForSingleValueEvent(
