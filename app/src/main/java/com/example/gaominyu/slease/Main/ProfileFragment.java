@@ -11,9 +11,11 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gaominyu.slease.Model.ItemPreview;
+import com.example.gaominyu.slease.Model.User;
 import com.example.gaominyu.slease.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -28,13 +30,17 @@ import java.util.List;
 
 public class ProfileFragment extends Fragment {
 
+    private TextView userName;
+    private TextView userDescription;
     private RecyclerView recyclerView;
     private List<ItemPreview> itemPreviewList;
     private List<String> itemIDs;
     private ItemAdapter mAdapter;
     private DatabaseReference FirebaseDatabaseItem;
-    private FirebaseUser user;
+    private DatabaseReference FirebaseDatabaseUser;
+    private FirebaseUser FBuser;
     private String userId;
+    private User user;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -58,6 +64,8 @@ public class ProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
+        userName = view.findViewById(R.id.user_displayName);
+        userDescription = view.findViewById(R.id.user_description);
         recyclerView = view.findViewById(R.id.recycler_profile);
         itemPreviewList = new ArrayList<>();
         mAdapter = new ItemAdapter(getActivity(), itemPreviewList);
@@ -69,41 +77,64 @@ public class ProfileFragment extends Fragment {
         recyclerView.setAdapter(mAdapter);
         recyclerView.setNestedScrollingEnabled(false);
 
-        user = FirebaseAuth.getInstance().getCurrentUser();
+        FBuser = FirebaseAuth.getInstance().getCurrentUser();
 
-        fetchLeasedItemsToLocal();
+        if(FBuser != null) {
+            userId = FBuser.getUid();
+            fetchUserProfileToDisplay();
+            fetchLeasedItemsToLocal();
+        }
 
         return view;
     }
 
+    private void fetchUserProfileToDisplay(){
+
+        FirebaseDatabaseUser = FirebaseDatabase.getInstance().getReference("users").child(userId);
+        FirebaseDatabaseUser.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        user = dataSnapshot.getValue(User.class);
+                        userName.setText("Name: " + user.displayName);
+                        userDescription.setText("Description: " + user.description);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        //handle databaseError
+                    }
+                });
+
+    }
+
     private void fetchLeasedItemsToLocal() {
 
-        if(user != null) {
-
-            userId = user.getUid();
-            itemIDs = new ArrayList<>();
-            FirebaseDatabaseItem = FirebaseDatabase.getInstance().getReference("items").child(userId);
-            FirebaseDatabaseItem.addListenerForSingleValueEvent(
-                    new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            for (DataSnapshot item : dataSnapshot.getChildren()) {
-                                itemIDs.add(item.getKey());
-                            }
-
-                            fetchLeasedItemPreviews();
+        itemIDs = new ArrayList<>();
+        FirebaseDatabaseItem = FirebaseDatabase.getInstance().getReference("items").child(userId);
+        FirebaseDatabaseItem.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot item : dataSnapshot.getChildren()) {
+                            itemIDs.add(item.getKey());
                         }
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                            //handle databaseError
-                        }
-                    });
-        }
+                        fetchLeasedItemPreviews();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        //handle databaseError
+                    }
+                });
+
     }
 
     private void fetchLeasedItemPreviews() {
+
         for (int i = 0; i < itemIDs.size(); i++) {
+
             if(i == itemIDs.size() - 1) {
 
                 FirebaseDatabase.getInstance().getReference("items_preview").child(itemIDs.get(i)).addListenerForSingleValueEvent(
@@ -141,6 +172,7 @@ public class ProfileFragment extends Fragment {
             }
 
         }
+
     }
 
     /**
