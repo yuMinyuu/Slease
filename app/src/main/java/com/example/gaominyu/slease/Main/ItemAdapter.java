@@ -18,26 +18,19 @@ import com.example.gaominyu.slease.R;
 import java.util.List;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MyViewHolder> {
-    private Context context;
-    private List<ItemPreview> itemPreviewList;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView name, price, deposit;
-        public ImageView thumbnail;
-
-        public MyViewHolder(View view) {
-            super(view);
-            name = view.findViewById(R.id.title);
-            price = view.findViewById(R.id.price);
-            deposit = view.findViewById(R.id.deposit);
-            thumbnail = view.findViewById(R.id.thumbnail);
-        }
+    public interface OnItemClickListener {
+        void onItemClick(ItemPreview itemPreview);
     }
 
+    private Context context;
+    private final List<ItemPreview> itemPreviewList;
+    private final OnItemClickListener listener;
 
-    public ItemAdapter(Context context, List<ItemPreview> itemPreviewList) {
+    public ItemAdapter(Context context, List<ItemPreview> itemPreviewList, OnItemClickListener listener) {
         this.context = context;
         this.itemPreviewList = itemPreviewList;
+        this.listener = listener;
     }
 
     @Override
@@ -53,17 +46,43 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MyViewHolder> 
         final ItemPreview itemPreview = itemPreviewList.get(position);
         holder.name.setText(itemPreview.title);
         holder.deposit.setText("deposit: $" + itemPreview.deposit);
-        holder.price.setText("rate：$" + itemPreview.rate + " per " + itemPreview.frequencyID);
+        holder.price.setText("rate：$" + itemPreview.rate + " per " + itemPreview.interval);
 
         byte[] decodedString = Base64.decode(itemPreview.imageBase64, Base64.DEFAULT);
         Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
         Glide.with(context)
                 .load(bitmap)
                 .into(holder.thumbnail);
+
+        // set onclick action on each item in RecyclerView
+        holder.bindClickAction(itemPreview, listener);
     }
 
     @Override
     public int getItemCount() {
         return itemPreviewList.size();
+    }
+
+    static class MyViewHolder extends RecyclerView.ViewHolder {
+        public TextView name, price, deposit;
+        public ImageView thumbnail;
+
+        MyViewHolder(View view) {
+            super(view);
+            name = view.findViewById(R.id.title);
+            price = view.findViewById(R.id.price);
+            deposit = view.findViewById(R.id.deposit);
+            thumbnail = view.findViewById(R.id.thumbnail);
+        }
+
+        void bindClickAction(final ItemPreview itemPreview, final OnItemClickListener listener) {
+            //name.setText(itemPreview.name);
+            //Picasso.with(itemView.getContext()).load(item.imageUrl).into(image);
+            thumbnail.setOnClickListener(new View.OnClickListener() {
+                    @Override public void onClick(View v) {
+                        listener.onItemClick(itemPreview);
+                    }
+            });
+        }
     }
 }
