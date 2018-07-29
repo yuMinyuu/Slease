@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 
 import com.example.gaominyu.slease.Main.BrowseActivity;
+import com.example.gaominyu.slease.Model.Interval;
 import com.example.gaominyu.slease.Model.Item;
 import com.example.gaominyu.slease.Model.ItemPreview;
 import com.example.gaominyu.slease.R;
@@ -200,26 +201,9 @@ public class CreateActivity extends AppCompatActivity {
 
     private void initSecondSpinner() {
 
-        // Spinner Drop down elements with some trumped-up examples of choices
-        final List<String> frequencyList = new ArrayList<>();
-        frequencyList.add("Select One");
-        FirebaseDatabaseFrequencies.addListenerForSingleValueEvent(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        for (DataSnapshot child : dataSnapshot.getChildren()) {
-                            frequencyList.add(child.getValue().toString());
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        //handle databaseError
-                    }
-                });
-
         // Creating adapter for spinner and disable the first item in the list from selection
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, frequencyList){
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, Interval.listOfIntervals){
             @Override
             public boolean isEnabled(int position) {
                 if (position == 0) {
@@ -367,7 +351,7 @@ public class CreateActivity extends AppCompatActivity {
                 TextView errorTxtCategory = (TextView) categoryDropDown.getSelectedView();
                 String deposit = inputDeposit.getText().toString().trim();
                 String rate = inputRate.getText().toString().trim();
-                int frequencyID = frequencyDropDown.getSelectedItemPosition();
+                String interval = frequencyDropDown.getSelectedItem().toString();
                 TextView errorTxtFrequency = (TextView) frequencyDropDown.getSelectedView();
                 boolean allowCash = checkCash.isChecked();
                 boolean allowTransfer = checkTransfer.isChecked();
@@ -428,14 +412,15 @@ public class CreateActivity extends AppCompatActivity {
                     userId = user.getUid();
 
                     Item item = new Item(title, description, categoryID, deposit, rate,
-                            frequencyID, allowCash, allowTransfer);
+                            interval, allowCash, allowTransfer);
 
                     String mainImageBase64 = getBase64FromImageView();
 
-                    ItemPreview itemPreview = new ItemPreview(title, categoryID, rate, deposit,
-                            frequencyID, mainImageBase64);
-
                     String key = FirebaseDatabaseItemPreview.push().getKey();
+
+                    ItemPreview itemPreview = new ItemPreview(title, categoryID, rate, deposit,
+                            interval, mainImageBase64, userId, key);
+
                     FirebaseDatabaseItem.child(userId).child(key).setValue(item); // items with full info
                     FirebaseDatabaseItemPreview.child(key).setValue(itemPreview);// items with simple info
 
