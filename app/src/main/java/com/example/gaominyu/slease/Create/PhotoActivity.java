@@ -57,7 +57,7 @@ public class PhotoActivity extends AppCompatActivity {
         linearLayout = findViewById(R.id.photo_thumbnails);
         btnNext = findViewById(R.id.photo_button2);
 
-        // Initialze list of images from previous activity
+        // Initialize list of images from previous activity
         if(isCallBack) {
 
             ImageHolder imageHolder = ImageHolder.getSingleton();
