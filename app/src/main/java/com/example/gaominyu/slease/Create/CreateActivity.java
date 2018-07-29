@@ -2,6 +2,7 @@ package com.example.gaominyu.slease.Create;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.annotation.NonNull;
@@ -507,18 +508,36 @@ public class CreateActivity extends AppCompatActivity {
         }
     }
 
+
+
     private String getBase64FromImageView(){
 
         FrameLayout frameLayout = (FrameLayout)gridLayout.getChildAt(0);
         ImageView imageView = (ImageView) frameLayout.getChildAt(0);
         Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
 
-        // TO DO: downsize bitmap image here to thumbnail size
+        float width = bitmap.getWidth();
+        float height = bitmap.getHeight();
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
         byte[] byteArray = byteArrayOutputStream .toByteArray();
-        return Base64.encodeToString(byteArray, Base64.DEFAULT);
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length, options);
+
+        options.inSampleSize =2;
+        options.inJustDecodeBounds = false;
+
+        options.inDither = false;
+        options.inPreferredConfig = null;
+        Bitmap new_bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length, options);
+
+        ByteArrayOutputStream byteArrayOutputStream1 = new ByteArrayOutputStream();
+        new_bmp.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream1);
+        byte[] byteArray1 = byteArrayOutputStream1 .toByteArray();
+        return Base64.encodeToString(byteArray1, Base64.DEFAULT);
 
     }
 
