@@ -66,20 +66,18 @@ public class SignupActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {
                     if (snapshot.hasChild(userId)) {
+                        details.setText("Welcome! " + user.getDisplayName());
+                        inputDisplayName.setText(user.getDisplayName());
                         startActivity(new Intent(SignupActivity.this, BrowseActivity.class));
+                    }else {
+                        // No user is signed in.
+                        startActivity(new Intent(SignupActivity.this, LoginActivity.class));
                     }
                 }
 
                 @Override
-                public void onCancelled(DatabaseError arg0) {
-                }
+                public void onCancelled(DatabaseError arg0) {}
             });
-
-            details.setText("Welcome! " + user.getDisplayName());
-            inputDisplayName.setText(user.getDisplayName());
-        } else {
-            // No user is signed in.
-            startActivity(new Intent(SignupActivity.this, LoginActivity.class));
         }
 
         // Save / update the user
