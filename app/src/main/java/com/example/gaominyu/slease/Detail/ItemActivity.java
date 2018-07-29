@@ -20,13 +20,24 @@ import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
+import com.example.gaominyu.slease.Model.Item;
+import com.example.gaominyu.slease.Model.User;
 import com.example.gaominyu.slease.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 
 public class ItemActivity extends AppCompatActivity implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener{
 
     private SliderLayout sliderLayout;
+    private String userId;
+    private String itemId;
+    private Item item;
+    private DatabaseReference FirebaseDatabaseItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,48 +47,74 @@ public class ItemActivity extends AppCompatActivity implements BaseSliderView.On
         // Initialize view elements
         sliderLayout = findViewById(R.id.image_slider);
 
-        HashMap<String,String> url_maps = new HashMap<>();
-        url_maps.put("Hannibal", "http://static2.hypable.com/wp-content/uploads/2013/12/hannibal-season-2-release-date.jpg");
-        url_maps.put("Big Bang Theory", "http://tvfiles.alphacoders.com/100/hdclearart-10.png");
-        url_maps.put("House of Cards", "http://cdn3.nflximg.net/images/3093/2043093.jpg");
-        url_maps.put("Game of Thrones", "http://images.boomsbeat.com/data/images/full/19640/game-of-thrones-season-4-jpg.jpg");
-
-        HashMap<String,Integer> file_maps = new HashMap<>();
-        file_maps.put("Hannibal",R.drawable.activity);
-        file_maps.put("Big Bang Theory",R.drawable.browse);
-        file_maps.put("House of Cards",R.drawable.camera);
-        file_maps.put("Game of Thrones", R.drawable.cross16);
-
-        for(String name : file_maps.keySet()){
-            TextSliderView textSliderView = new TextSliderView(this);
-            // initialize a SliderLayout
-            textSliderView.description(name)
-                          .image(file_maps.get(name))
-                          .setScaleType(BaseSliderView.ScaleType.Fit)
-                          .setOnSliderClickListener(this);
-
-            //add your extra information
-            textSliderView.bundle(new Bundle());
-            textSliderView.getBundle()
-                    .putString("extra",name);
-
-            sliderLayout.addSlider(textSliderView);
+        // Retrieve current item
+        Intent intent = getIntent();
+        userId = intent.getStringExtra("userID");
+        itemId = intent.getStringExtra("userID");
+        FirebaseDatabaseItem = FirebaseDatabase.getInstance().getReference("users").child(userId).child(itemId);
+        if(FirebaseDatabaseItem == null){
+            Toast.makeText(getApplication(), "item does not exist anymore", Toast.LENGTH_SHORT).show();
+            return;
         }
+        FirebaseDatabaseItem.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        // Finish retrieving
+                        item = dataSnapshot.getValue(Item.class);
 
-        sliderLayout.setPresetTransformer(SliderLayout.Transformer.Accordion);
-        sliderLayout.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
-        sliderLayout.setCustomAnimation(new DescriptionAnimation());
-        sliderLayout.setDuration(4000);
-        sliderLayout.addOnPageChangeListener(this);
-        ListView l = findViewById(R.id.transformers);
-        l.setAdapter(new TransformerAdapter(this));
-        l.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                sliderLayout.setPresetTransformer(((TextView) view).getText().toString());
-                Toast.makeText(ItemActivity.this, ((TextView) view).getText().toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
+                        // Initialize slider layout for images of current item
+                        HashMap<String,String> url_maps = new HashMap<>();
+                        url_maps.put("Hannibal", "http://static2.hypable.com/wp-content/uploads/2013/12/hannibal-season-2-release-date.jpg");
+                        url_maps.put("Big Bang Theory", "http://tvfiles.alphacoders.com/100/hdclearart-10.png");
+                        url_maps.put("House of Cards", "http://cdn3.nflximg.net/images/3093/2043093.jpg");
+                        url_maps.put("Game of Thrones", "http://images.boomsbeat.com/data/images/full/19640/game-of-thrones-season-4-jpg.jpg");
+
+                        HashMap<String,Integer> file_maps = new HashMap<>();
+                        file_maps.put("Hannibal",R.drawable.activity);
+                        file_maps.put("Big Bang Theory",R.drawable.browse);
+                        file_maps.put("House of Cards",R.drawable.camera);
+                        file_maps.put("Game of Thrones", R.drawable.cross16);
+
+                        for(String name : file_maps.keySet()){
+                            TextSliderView textSliderView = new TextSliderView(ItemActivity.this);
+                            // initialize a SliderLayout
+                            textSliderView.description(name)
+                                    .image(file_maps.get(name))
+                                    .setScaleType(BaseSliderView.ScaleType.Fit)
+                                    .setOnSliderClickListener(ItemActivity.this);
+
+                            //add your extra information
+                            textSliderView.bundle(new Bundle());
+                            textSliderView.getBundle()
+                                    .putString("extra",name);
+
+                            sliderLayout.addSlider(textSliderView);
+                        }
+
+                        sliderLayout.setPresetTransformer(SliderLayout.Transformer.Accordion);
+                        sliderLayout.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+                        sliderLayout.setCustomAnimation(new DescriptionAnimation());
+                        sliderLayout.setDuration(4000);
+                        sliderLayout.addOnPageChangeListener(ItemActivity.this);
+                        ListView l = findViewById(R.id.transformers);
+                        l.setAdapter(new TransformerAdapter(ItemActivity.this));
+                        l.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                sliderLayout.setPresetTransformer(((TextView) view).getText().toString());
+                                Toast.makeText(ItemActivity.this, ((TextView) view).getText().toString(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        //handle databaseError
+                    }
+                });
+
+
     }
 
     @Override
