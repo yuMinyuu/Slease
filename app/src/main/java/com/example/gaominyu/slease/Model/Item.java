@@ -11,7 +11,7 @@ public class Item {
     public int categoryID;
     public String deposit;
     public String rate;
-    public int frequencyID;
+    public String interval;
     public boolean allowCash;
     public boolean allowTransfer;
 
@@ -21,13 +21,13 @@ public class Item {
     }
 
     public Item(String title, String description, int categoryID, String deposit,
-                String rate, int frquencyID, boolean allowCash, boolean allowTransfer){
+                String rate, String interval, boolean allowCash, boolean allowTransfer){
         this.title = title;
         this.description = description;
         this.categoryID = categoryID;
         this.deposit = deposit;
         this.rate = rate;
-        this.frequencyID = frquencyID;
+        this.interval = interval;
         this.allowCash = allowCash;
         this.allowTransfer = allowTransfer;
     }
