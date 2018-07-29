@@ -72,10 +72,10 @@ public class ProfileFragment extends Fragment {
         itemPreviewList = new ArrayList<>();
         mAdapter = new ItemAdapter(getActivity(), itemPreviewList, new ItemAdapter.OnItemClickListener() {
             @Override public void onItemClick(ItemPreview itemPreview) {
-                Bundle extras = new Bundle();
-                extras.putCharSequence("userID", itemPreview.userId);
-                extras.putCharSequence("itemID", itemPreview.itemId);
-                startActivity(new Intent(getActivity(), ItemActivity.class), extras);
+                Intent intent = new Intent(getActivity(), ItemActivity.class);
+                intent.putExtra("userID", itemPreview.userId);
+                intent.putExtra("itemID", itemPreview.itemId);
+                startActivity(intent);
             }
         });
 
