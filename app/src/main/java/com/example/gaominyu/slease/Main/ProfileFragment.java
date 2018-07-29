@@ -1,5 +1,6 @@
 package com.example.gaominyu.slease.Main;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.gaominyu.slease.Detail.ItemActivity;
 import com.example.gaominyu.slease.Model.ItemPreview;
 import com.example.gaominyu.slease.Model.User;
 import com.example.gaominyu.slease.R;
@@ -68,7 +70,14 @@ public class ProfileFragment extends Fragment {
         userDescription = view.findViewById(R.id.user_description);
         recyclerView = view.findViewById(R.id.recycler_profile);
         itemPreviewList = new ArrayList<>();
-        mAdapter = new ItemAdapter(getActivity(), itemPreviewList);
+        mAdapter = new ItemAdapter(getActivity(), itemPreviewList, new ItemAdapter.OnItemClickListener() {
+            @Override public void onItemClick(ItemPreview itemPreview) {
+                Bundle extras = new Bundle();
+                extras.putCharSequence("userID", itemPreview.userId);
+                extras.putCharSequence("itemID", itemPreview.itemId);
+                startActivity(new Intent(getActivity(), ItemActivity.class), extras);
+            }
+        });
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 3);
         recyclerView.setLayoutManager(mLayoutManager);

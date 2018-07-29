@@ -1,5 +1,6 @@
 package com.example.gaominyu.slease.Main;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.gaominyu.slease.Detail.ItemActivity;
 import com.example.gaominyu.slease.Model.ItemPreview;
 import com.example.gaominyu.slease.R;
 import com.google.firebase.database.DataSnapshot;
@@ -58,7 +60,14 @@ public class BrowseFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.recycler_view);
         itemPreviewList = new ArrayList<>();
-        mAdapter = new ItemAdapter(getActivity(), itemPreviewList);
+        mAdapter = new ItemAdapter(getActivity(), itemPreviewList, new ItemAdapter.OnItemClickListener() {
+            @Override public void onItemClick(ItemPreview itemPreview) {
+                Bundle extras = new Bundle();
+                extras.putCharSequence("userID", itemPreview.userId);
+                extras.putCharSequence("itemID", itemPreview.itemId);
+                startActivity(new Intent(getActivity(), ItemActivity.class), extras);
+            }
+        });
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 3);
         recyclerView.setLayoutManager(mLayoutManager);
