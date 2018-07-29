@@ -7,6 +7,23 @@
     tools:context=".Detail.ItemActivity"
     android:orientation="vertical">
 
-    
+    <com.daimajia.slider.library.SliderLayout
+        android:id="@+id/image_slider"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        />
+
+    <com.daimajia.slider.library.Indicators.PagerIndicator
+        android:id="@+id/image_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        />
+
+    <ListView
+        android:id="@+id/transformers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
 
 </LinearLayout>
